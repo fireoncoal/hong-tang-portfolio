@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Hong TANG · AI Ops Portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
+<style>
+/* Concept: a campaign book. Each chapter is a colour-blocked "poster" with a live visual of the real system behind it. One flow engine drives the hero and the order pipeline. Single committed look. */
+:root{
+  color-scheme:light;
+  --paper:#EEF0F3; --ink:#0B0E14; --ink-2:#3B4250; --mute:#7A8292;
+  --cobalt:#2E44B8; --cobalt-2:#1B2878; --sun:#F2C451; --coral:#E06A50; --mint:#2FAE8A; --sky:#9ED8F5;
+  --night:#0B0E14; --night-2:#151A24; --line:rgba(11,14,20,.12);
+  --d:"Syne","Noto Sans SC",system-ui,sans-serif;
+  --b:"Onest","Noto Sans SC",system-ui,sans-serif;
+  --m:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--b);font-size:16px;line-height:1.55;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:20;background:var(--paper)}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+:root[data-lang="en"] .zh{display:none} :root[data-lang="zh"] .en{display:none}
+h1,h2,h3{font-family:var(--d);margin:0;line-height:1.02;text-wrap:balance}
+:root[data-lang="zh"] h1,:root[data-lang="zh"] h2,:root[data-lang="zh"] h3{font-weight:700;letter-spacing:0;line-height:1.15}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+.pad{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1200px;margin:0 auto}
+.k{font-family:var(--m);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;background:var(--paper);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:10px}
+.logo{font-family:var(--d);font-weight:800;font-size:18px;letter-spacing:-.01em}
+.logo span{color:var(--cobalt)}
+.nav-r{display:flex;gap:6px;flex-wrap:wrap}
+.pill{border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600}
+.pill[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.pill.go{background:var(--cobalt);border-color:var(--cobalt);color:#fff}
+
+/* hero */
+.hero{position:relative;padding-block:48px 0}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:24px;align-items:center}
+@media (max-width:900px){.hero .wrap{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(34px,4.4vw,64px);font-weight:700;letter-spacing:-.025em}
+.hero h1 .hl{background:linear-gradient(transparent 58%,var(--sun) 58%);padding:0 .12em;border-radius:.12em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.hero .sub{margin-top:22px;font-size:18px;color:var(--ink-2);max-width:52ch}
+.hero .who{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+.tagx{font-family:var(--m);font-size:12px;border:1px solid var(--ink);border-radius:6px;padding:4px 8px}
+.stage{position:relative;aspect-ratio:1/0.82;width:100%;max-width:100%;background:var(--night);border-radius:22px;overflow:hidden;box-shadow:0 30px 60px -30px rgba(11,14,20,.5)}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%}
+.stage .cap{position:absolute;left:16px;bottom:14px;right:16px;display:flex;justify-content:space-between;gap:10px;color:#C9D1E0;font-family:var(--m);font-size:11px}
+.stage .cap b{color:var(--sun);font-weight:500}
+.ticker{margin-top:48px;background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap}
+.ticker .row{display:inline-flex;gap:56px;padding:16px 0;animation:tick 38s linear infinite}
+.ticker .it{display:inline-flex;align-items:baseline;gap:10px;font-size:15px}
+.ticker .it b{font-family:var(--d);font-size:22px;font-weight:700;color:var(--sun);font-variant-numeric:tabular-nums}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* JD switchboard */
+.jd{padding-block:80px}
+.jd h2{font-size:clamp(28px,3.6vw,46px);font-weight:700;letter-spacing:-.02em;max-width:15ch}
+.jd .lead{margin-top:14px;color:var(--ink-2);max-width:56ch}
+.board{margin-top:36px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:980px){.board{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.board{grid-template-columns:1fr}}
+.tile{position:relative;text-align:left;border:0;border-radius:18px;padding:18px;min-height:220px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;transition:transform .2s, box-shadow .2s}
+.tile:hover{transform:translateY(-4px)}
+.tile[aria-pressed="true"]{box-shadow:0 0 0 4px var(--ink)}
+.tile .num{font-family:var(--d);font-size:40px;font-weight:700;line-height:.9;opacity:.9}
+.tile h3{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.tile q{quotes:none;font-size:13px;line-height:1.4;opacity:.85}
+.tile .hits{font-family:var(--m);font-size:11px;letter-spacing:.08em}
+.t1{background:var(--sun)} .t2{background:var(--mint)} .t3{background:var(--cobalt);color:#fff} .t4{background:var(--coral);color:#fff}
+.shelf{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px;min-height:44px;align-items:center}
+.proj{border:1.5px solid var(--ink);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:600;background:var(--paper);transition:opacity .2s,background .2s}
+.proj.dim{opacity:.22}
+.proj.lit{background:var(--ink);color:var(--paper)}
+
+/* chapters */
+.ch{padding-block:88px;scroll-margin-top:60px;position:relative}
+.ch .head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:end;margin-bottom:34px}
+@media (max-width:760px){.ch .head{grid-template-columns:1fr}}
+.ch h2{font-size:clamp(28px,3.8vw,50px);font-weight:700;letter-spacing:-.02em;max-width:18ch}
+.ch .idx{font-family:var(--d);font-weight:700;font-size:clamp(48px,6vw,84px);line-height:.8;opacity:.12}
+.split{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:36px;align-items:start}
+@media (max-width:900px){.split{grid-template-columns:1fr}}
+.copy{display:grid;gap:16px;font-size:16px}
+.copy .steps{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.copy .steps li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;font-size:15.5px}
+.copy .steps li::before{content:attr(data-n);font-family:var(--m);font-size:12px;border:1.5px solid currentColor;border-radius:50%;width:24px;height:24px;display:grid;place-items:center}
+.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-top:4px}
+.num-c{border-top:2px solid currentColor;padding-top:8px}
+.num-c b{display:block;font-family:var(--d);font-size:clamp(24px,2.4vw,30px);font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.05}
+.num-c span{font-size:13px;opacity:.8}
+.illus{font-family:var(--m);font-size:11px;opacity:.7;letter-spacing:.06em}
+
+/* chapter colours */
+.c-orders{background:var(--cobalt);color:#fff}
+.c-orders .panel{background:#0B1660;border-radius:20px;padding:14px;display:grid;gap:12px}
+.c-orders .flow{position:relative;height:340px;border-radius:14px;overflow:hidden;background:radial-gradient(120% 120% at 50% 0%,#14229A 0%,#0A1350 70%)}
+.c-orders .flow canvas{position:absolute;inset:0;width:100%;height:100%}
+.ctrl{display:flex;flex-wrap:wrap;gap:6px;justify-content:space-between}
+.ctrl .g{display:flex;gap:6px;flex-wrap:wrap}
+.sw{border:1.5px solid rgba(255,255,255,.5);background:transparent;color:#fff;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600}
+.sw[aria-pressed="true"]{background:#fff;color:var(--cobalt-2);border-color:#fff}
+.sw.hot{background:var(--sun);border-color:var(--sun);color:var(--ink)}
+.term{font-family:var(--m);font-size:12.5px;line-height:1.55;background:#050A33;color:#C8D2FF;border-radius:12px;padding:12px 14px;height:150px;overflow:auto;white-space:pre-wrap}
+.term .ok{color:#5CF2B4} .term .bad{color:#FF8A70} .term .note{color:var(--sun)}
+
+.c-lark{background:#F7F8FA}
+.chat{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 30px 60px -36px rgba(11,14,20,.35)}
+.chat .top{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.dot{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--mint),#0E8F6E);display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px}
+.chat .top b{font-size:14px} .chat .top small{display:block;font-size:11px;color:var(--mute)}
+.msgs{padding:16px;display:grid;gap:10px;min-height:330px;align-content:start;background:#FAFBFC}
+.bub{max-width:82%;padding:10px 13px;border-radius:14px;font-size:14px;line-height:1.45;animation:pop .35s ease both}
+.bub.me{justify-self:end;background:#E8F0FF;border-bottom-right-radius:4px}
+.bub.ai{background:#fff;border:1px solid var(--line);border-bottom-left-radius:4px}
+.bub.tool{font-family:var(--m);font-size:12px;background:#ECFBF5;color:#0B6B51;border:1px dashed #6FD6B3}
+.bub.ok{background:var(--ink);color:#fff}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.people{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.p{width:34px;height:34px;border-radius:50%;background:#DDE2EA;display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--ink-2);transition:background .3s,color .3s}
+.p.on{background:var(--mint);color:#fff}
+
+.c-geo{background:var(--sun)}
+.answer{background:#fff;border-radius:20px;padding:18px;box-shadow:0 30px 60px -36px rgba(11,14,20,.45);display:grid;gap:12px}
+.answer .q{display:flex;gap:10px;align-items:center;font-weight:600}
+.answer .q .ic{width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:12px}
+.answer .txt{font-size:15px;color:var(--ink-2);min-height:96px}
+.answer mark{background:#FFF1BF;border-bottom:2px solid var(--ink);padding:0 2px}
+.bars{display:grid;gap:14px}
+.bar{display:grid;gap:6px}
+.bar .lbl{display:flex;justify-content:space-between;font-size:14px;font-weight:600}
+.bar .track{height:22px;background:rgba(11,14,20,.12);border-radius:6px;overflow:hidden}
+.bar .fill{height:100%;width:0;background:var(--ink);border-radius:6px;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.receipt{display:flex;gap:10px;flex-wrap:wrap}
+.rc{background:var(--ink);color:#fff;border-radius:12px;padding:10px 12px;font-family:var(--m);font-size:12px;display:grid;gap:2px}
+.rc b{color:var(--sun);font-size:13px}
+
+.c-growth{background:var(--coral);color:#fff}
+.sky{position:relative;height:380px;background:#1B0E0A;border-radius:20px;overflow:hidden}
+.sky canvas{position:absolute;inset:0;width:100%;height:100%}
+.sky .hud{position:absolute;left:14px;top:12px;right:14px;display:flex;justify-content:space-between;gap:8px;font-family:var(--m);font-size:12px;color:#FFD9CF}
+.sky .hud b{color:#fff;font-size:16px}
+.sky .act{position:absolute;right:14px;bottom:14px}
+.ring{display:flex;gap:18px;align-items:center}
+.ring svg{flex:none}
+
+.c-more{background:var(--night);color:var(--paper)}
+.more{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.more{grid-template-columns:1fr}}
+.mc{background:var(--night-2);border:1px solid #232B3A;border-radius:20px;padding:20px;display:grid;gap:12px;align-content:start}
+.mc h3{font-size:21px;font-weight:700}
+.mc p{color:#B9C1D0;font-size:14.5px}
+.gate{display:grid;gap:8px}
+.gate input{width:100%;accent-color:var(--sun)}
+.route{font-family:var(--m);font-size:12px;padding:8px 10px;border-radius:10px;background:#0B0E14;border:1px solid #2A3345}
+.route b{color:var(--sun)}
+.store{background:#fff;color:var(--ink);border-radius:14px;padding:14px;display:grid;gap:6px}
+.store .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.stars{color:#F5B400;letter-spacing:2px}
+.us{height:8px;border-radius:4px;background:#E2E6EE;overflow:hidden}.us i{display:block;height:100%;width:85%;background:var(--cobalt)}
+.agents{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ag{border:1px solid #2A3345;border-radius:12px;padding:10px;text-align:center;font-size:12px;transition:background .3s,border-color .3s}
+.ag b{display:block;font-family:var(--d);font-size:16px}
+.ag.on{background:var(--sun);color:var(--ink);border-color:var(--sun)}
+.baton{font-family:var(--m);font-size:12px;color:#B9C1D0;min-height:2.8em}
+
+
+.c-yours{background:#fff}
+.yours{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:900px){.yours{grid-template-columns:1fr}}
+.yc{border:1px solid var(--line);border-radius:18px;overflow:hidden;display:grid;align-content:start}
+.yc .top{padding:16px 18px;background:var(--paper);display:grid;gap:6px}
+.yc .top a{font-family:var(--m);font-size:11px;color:var(--mute)}
+.yc .top h3{font-size:19px;font-weight:700}
+.yc .top p{font-size:13.5px;color:var(--ink-2)}
+.yc .mid{padding:16px 18px;display:grid;gap:8px;border-top:1px solid var(--line)}
+.yc .mid .k{color:var(--cobalt)}
+.yc .mid p{font-size:14.5px}
+.yc .bot{padding:12px 18px;background:var(--ink);color:#DDE3EE;font-size:13px}
+.yc .bot b{color:var(--sun);font-weight:600}
+
+/* calculator */
+.c-calc{background:var(--paper)}
+.calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;background:#fff;border-radius:24px;padding:26px;border:1px solid var(--line)}
+@media (max-width:800px){.calc{grid-template-columns:1fr}}
+.field{display:grid;gap:4px}
+.field label{font-size:14px;font-weight:600;display:flex;justify-content:space-between;gap:8px}
+.field output{font-family:var(--m);color:var(--cobalt)}
+.field input{width:100%;accent-color:var(--cobalt)}
+.out{background:var(--ink);color:#fff;border-radius:18px;padding:22px;display:grid;gap:10px;align-content:center}
+.out .big{font-family:var(--d);font-weight:700;font-size:clamp(44px,6vw,72px);line-height:.9;color:var(--sun);font-variant-numeric:tabular-nums}
+.out small{color:#B9C1D0}
+
+/* views & plan */
+.c-views{background:#fff}
+.views{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+@media (max-width:860px){.views{grid-template-columns:1fr}}
+.vw{display:grid;gap:10px}
+.vw .big{font-family:var(--d);font-weight:700;font-size:44px;line-height:.8;color:var(--cobalt)}
+.vw h3{font-size:22px;font-weight:700}
+.vw p{color:var(--ink-2)}
+.plan{margin-top:56px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border:2px solid var(--ink);border-radius:20px;overflow:hidden}
+@media (max-width:860px){.plan{grid-template-columns:1fr}}
+.ph{padding:20px;display:grid;gap:8px;border-right:2px solid var(--ink)}
+.ph:last-child{border-right:0}
+@media (max-width:860px){.ph{border-right:0;border-bottom:2px solid var(--ink)}.ph:last-child{border-bottom:0}}
+.ph .k{color:var(--cobalt)}
+.ph h3{font-size:20px;font-weight:700}
+.ph:nth-child(2){background:var(--sun)} .ph:nth-child(3){background:var(--ink);color:#fff}
+.ph:nth-child(3) .k{color:var(--sun)}
+
+footer{background:var(--ink);color:#C9D1E0;padding-block:56px}
+footer .wrap{display:grid;gap:10px}
+footer h2{font-size:clamp(28px,3.6vw,46px);color:#fff;font-weight:700;letter-spacing:-.02em}
+footer .c{font-family:var(--m);font-size:14px;color:var(--sun)}
+
+/* presenter */
+.pager{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;display:flex;align-items:center;gap:6px;background:var(--sun);color:var(--ink);border-radius:999px;padding:6px 6px 6px 14px;font-family:var(--m);font-size:13px;font-weight:500;box-shadow:0 14px 30px -10px rgba(0,0,0,.4)}
+.pager[hidden]{display:none}
+.pager button{border:0;background:var(--ink);color:#fff;border-radius:999px;width:36px;height:36px;font-size:15px}
+</style>
+
+<header class="nav pad">
+  <div class="wrap">
+    <div class="logo">Hong TANG<span>.</span></div>
+    <div class="nav-r">
+      <button class="pill go" id="present"><span class="en">▶ Present</span><span class="zh">▶ 演示模式</span></button>
+      <button class="pill" id="lang-en" aria-pressed="true">EN</button>
+      <button class="pill" id="lang-zh" aria-pressed="false">中文</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="s-hero" data-step>
+    <div class="wrap pad">
+      <div>
+        <p class="k"><span class="en">AI Operation Specialist · EternityX · interview 6 Nov</span><span class="zh">AI Operation Specialist · EternityX · 11 月 6 日面试</span></p>
+        <h1 style="margin-top:16px"><span class="en">I build the <span class="hl">AI workflows</span> behind the work.</span><span class="zh">我搭的是工作背后的<span class="hl">AI 工作流</span>。</span></h1>
+        <p class="sub"><span class="en">At a cross-border DTC brand selling in the US, Hong Kong, Singapore and Australia, I find the bottleneck with data, build the fix with AI tools, get colleagues to use it, and measure what changed. The animation on the right simulates the order system I built.</span><span class="zh">在一家销往美国、香港、新加坡、澳洲的跨境电商品牌，我用数据找到卡点，用 AI 工具搭出解决方案，推动同事用起来，再量化变化。右边的动画，模拟的就是我搭的订单系统。</span></p>
+        <div class="who">
+          <span class="tagx">MSc HKBU · top 5%</span><span class="tagx">IANG</span><span class="tagx">EN · 普通话</span><span class="tagx">Claude · Codex · ChatGPT · Gemini</span>
+        </div>
+      </div>
+      <div class="stage" id="hero-stage">
+        <canvas id="hero-cv" aria-label="Animated diagram of orders flowing from sales channels through an AI pipeline to warehouses"></canvas>
+        <div class="cap"><span><span class="en">Simulation of my order system: channels → AI pipeline → warehouses</span><span class="zh">订单系统模拟：销售渠道 → AI 管道 → 仓库</span></span><span><span class="en">simulated</span><span class="zh">模拟演示</span> · <b id="hero-count">0</b></span></div>
+      </div>
+    </div>
+    <div class="ticker" aria-hidden="true"><div class="row" id="ticker"></div></div>
+  </section>
+
+  <section class="jd pad" id="s-jd" data-step>
+    <div class="wrap">
+      <p class="k"><span class="en">Your JD, my evidence</span><span class="zh">你们的 JD × 我的证据</span></p>
+      <h2 style="margin-top:12px"><span class="en">Four things you asked for. Pick one.</span><span class="zh">JD 要的四件事，点一个看看。</span></h2>
+      <p class="lead"><span class="en">Each tile is a responsibility from the job description. Pick one and the projects that prove it light up below.</span><span class="zh">每块对应 JD 里的一项职责。点一下，下面能证明它的项目就会亮起来。</span></p>
+      <div class="board">
+        <button class="tile t1" data-pl="growth" aria-pressed="false"><span class="num">01</span><div><h3><span class="en">Growth intelligence</span><span class="zh">增长情报</span></h3><q>Translate business intelligence into automated growth workflows…</q></div><span class="hits"></span></button>
+        <button class="tile t2" data-pl="transform" aria-pressed="false"><span class="num">02</span><div><h3><span class="en">Departmental AI</span><span class="zh">部门 AI 转型</span></h3><q>Implement AI-powered workflow solutions across departments…</q></div><span class="hits"></span></button>
+        <button class="tile t3" data-pl="automation" aria-pressed="false"><span class="num">03</span><div><h3><span class="en">One pipeline</span><span class="zh">统一管道</span></h3><q>Consolidate regional workflows into unified, scalable pipelines…</q></div><span class="hits"></span></button>
+        <button class="tile t4" data-pl="adoption" aria-pressed="false"><span class="num">04</span><div><h3><span class="en">Adoption</span><span class="zh">推广落地</span></h3><q>Track and report efficiency gains against operational targets…</q></div><span class="hits"></span></button>
+      </div>
+      <div class="shelf" id="shelf">
+        <button class="proj" data-p="transform adoption automation" data-go="s-lark"><span class="en">Lark AI assistant</span><span class="zh">飞书 AI 助手</span></button>
+        <button class="proj" data-p="automation transform adoption" data-go="s-orders"><span class="en">Order pipeline → ERP</span><span class="zh">订单管道 → ERP</span></button>
+        <button class="proj" data-p="growth" data-go="s-geo"><span class="en">GEO · AI search</span><span class="zh">GEO · AI 搜索</span></button>
+        <button class="proj" data-p="growth automation" data-go="s-growth"><span class="en">Creator sourcing</span><span class="zh">AI 找达人</span></button>
+        <button class="proj" data-p="transform" data-go="s-more"><span class="en">AI customer service</span><span class="zh">AI 客服</span></button>
+        <button class="proj" data-p="automation" data-go="s-more"><span class="en">Amazon Scraper Pro</span><span class="zh">Amazon 插件</span></button>
+        <button class="proj" data-p="transform automation adoption" data-go="s-more"><span class="en">3-agent system</span><span class="zh">三 agent 系统</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="ch c-orders pad" id="s-orders" data-step>
+    <div class="wrap">
+      <div class="head"><div><p class="k" style="color:var(--sky)"><span class="en">03 · One pipeline</span><span class="zh">03 · 统一管道</span></p><h2 style="margin-top:12px"><span class="en">10 minutes of copy-paste, gone.</span><span class="zh">每天 10 分钟的复制粘贴，没了。</span></h2></div><div class="idx">A</div></div>
+      <div class="split">
+        <div class="copy">
+          <p><span class="en">A colleague used to log in to TikTok Shop every day, download each shipping label and post it to the Hong Kong warehouse's WhatsApp group. I rebuilt it in three versions, each removing a manual step. Requirements, design, testing, launch: mine, built with AI coding tools.</span><span class="zh">以前同事每天登录 TikTok 后台，逐个下载面单，再发到香港仓的 WhatsApp 群。我分三个版本重做，每一版去掉一个手工环节。需求、方案、测试、上线都由我负责，用 AI 编程工具开发。</span></p>
+          <ol class="steps">
+            <li data-n="1"><span class="en">7 of 7 real orders failed on the first live check. I stopped patching in production.</span><span class="zh">第一次真实验证，7 单全部失败。我停止在生产环境打补丁。</span></li>
+            <li data-n="2"><span class="en">Added staging, a per-order audit log and rule checks before any send.</span><span class="zh">加测试环境、每单审计记录、发送前规则校验。</span></li>
+            <li data-n="3"><span class="en">Replayed failures one by one: a "continue printing" pop-up broke the run.</span><span class="zh">逐单复现，定位根因：后台一个“继续打印”弹窗打断了流程。</span></li>
+          </ol>
+          <div class="nums">
+            <div class="num-c"><b>10→2–3</b><span><span class="en">minutes a day</span><span class="zh">每日分钟数</span></span></div>
+            <div class="num-c"><b>600+</b><span><span class="en">orders on peak days</span><span class="zh">高峰日订单</span></span></div>
+            <div class="num-c"><b>1,500+</b><span><span class="en">before the ERP switch</span><span class="zh">切 ERP 前累计</span></span></div>
+            <div class="num-c"><b>0</b><span><span class="en">missed or wrong pushes</span><span class="zh">漏推、错推</span></span></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="ctrl">
+            <div class="g" role="group" aria-label="Version">
+              <button class="sw" data-v="1" aria-pressed="false">v1 · <span class="en">Script</span><span class="zh">脚本</span></button>
+              <button class="sw" data-v="2" aria-pressed="false">v2 · <span class="en">Lark agent</span><span class="zh">飞书 agent</span></button>
+              <button class="sw" data-v="3" aria-pressed="true">v3 · ERP</button>
+            </div>
+            <div class="g"><button class="sw hot" id="run"><span class="en">▶ Run one order</span><span class="zh">▶ 跑一单</span></button><button class="sw" id="incident"><span class="en">Replay the failure</span><span class="zh">回放故障</span></button></div>
+          </div>
+          <div class="flow"><canvas id="ord-cv" aria-label="Order pipeline animation"></canvas></div>
+          <div class="term" id="term" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ch c-lark pad" id="s-lark" data-step>
+    <div class="wrap">
+      <div class="head"><div><p class="k" style="color:#0B8A66"><span class="en">02 · Departmental AI · 04 · Adoption</span><span class="zh">02 · 部门 AI · 04 · 推广落地</span></p><h2 style="margin-top:12px"><span class="en">An assistant people open every day.</span><span class="zh">同事每天都会打开的 AI 助手。</span></h2></div><div class="idx">B</div></div>
+      <div class="split">
+        <div class="copy">
+          <p><span class="en">I led the 0-to-1 delivery on Lark: interviews, solution design, acceptance, rollout and training. It answers from our own knowledge base (RAG) and can act, because 15 everyday business actions are wrapped as tools. After all-staff rollout I extended it to performance reviews.</span><span class="zh">在飞书上从 0 到 1 落地：访谈、方案、验收、推广、培训都由我负责。它基于我们自己的知识库（RAG）回答，也能直接办事，因为 15 个日常业务动作都做成了工具。全员上线后，又扩展到绩效考核。</span></p>
+          <div>
+            <p class="k" style="color:var(--mute)"><span class="en">E-commerce team using it</span><span class="zh">电商部在用的同事</span></p>
+            <div class="people" id="people"></div>
+          </div>
+          <div class="nums">
+            <div class="num-c"><b>14/14</b><span><span class="en">colleagues</span><span class="zh">位同事</span></span></div>
+            <div class="num-c"><b id="calls">100+</b><span><span class="en">calls a day</span><span class="zh">每天调用</span></span></div>
+            <div class="num-c"><b>15</b><span><span class="en">actions as tools</span><span class="zh">业务动作工具</span></span></div>
+          </div>
+        </div>
+        <div>
+          <div class="chat">
+            <div class="top"><div class="dot">AI</div><div><b><span class="en">Ops Assistant</span><span class="zh">运营助手</span></b><small>Lark · RAG + agent</small></div></div>
+            <div class="msgs" id="msgs"></div>
+          </div>
+          <p class="illus" style="margin-top:8px"><span class="en">Illustrative conversation. Real tools and data stay internal.</span><span class="zh">示意对话，真实工具和数据不对外展示。</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ch c-geo pad" id="s-geo" data-step>
+    <div class="wrap">
+      <div class="head"><div><p class="k"><span class="en">01 · Growth intelligence</span><span class="zh">01 · 增长情报</span></p><h2 style="margin-top:12px"><span class="en">When buyers ask AI, we show up.</span><span class="zh">消费者问 AI 时，答案里有我们。</span></h2></div><div class="idx">C</div></div>
+      <div class="split">
+        <div class="copy">
+          <p><span class="en">I built a fixed-question baseline with the ChatGPT and Gemini APIs, wrote content for real buyer questions in four languages, fixed inaccurate claims on the site, then re-tested the same way and withdrew conclusions that didn't hold. Then I tracked it to orders with UTM.</span><span class="zh">用 ChatGPT 和 Gemini 接口建立固定问题基线，针对真实购买问题写四种语言的内容，修正网站上不准确的说法，再同口径复测，不成立的结论撤回。最后用 UTM 追到订单。</span></p>
+          <div class="bars" id="bars">
+            <div class="bar"><div class="lbl"><span><span class="en">Before</span><span class="zh">优化前</span></span><span>16.7%</span></div><div class="track"><div class="fill" data-w="16.7"></div></div></div>
+            <div class="bar"><div class="lbl"><span><span class="en">After</span><span class="zh">优化后</span></span><span>58.3%</span></div><div class="track"><div class="fill" data-w="58.3"></div></div></div>
+          </div>
+          <p class="illus"><span class="en">Share of fixed questions where AI cites us · US site</span><span class="zh">美国站固定问题集里被 AI 引用的比例</span></p>
+          <div class="receipt">
+            <div class="rc"><span>AI RECOMMENDATIONS · 4 MARKETS</span><b>+40%</b></div>
+            <div class="rc"><span>SHOPIFY UTM · source=chatgpt</span><b>2 orders</b></div>
+          </div>
+        </div>
+        <div class="answer">
+          <div class="q"><span class="ic">?</span><span id="geo-q"></span></div>
+          <div class="txt" id="geo-a"></div>
+          <p class="illus"><span class="en">Illustrative AI answer. Brand name withheld.</span><span class="zh">示意 AI 回答，品牌名已隐去。</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ch c-growth pad" id="s-growth" data-step>
+    <div class="wrap">
+      <div class="head"><div><p class="k" style="color:#FFE2D9"><span class="en">01 · Lead prospecting · outbound</span><span class="zh">01 · 线索挖掘 · 外联</span></p><h2 style="margin-top:12px"><span class="en">1,300+ creators, sorted by AI.</span><span class="zh">1,300+ 达人，交给 AI 来筛。</span></h2></div><div class="idx">D</div></div>
+      <div class="split">
+        <div class="copy">
+          <p><span class="en">Manual creator search was slow and random. I used AI scraping plus activity rules to build a structured contact list, so outreach went to the creators most likely to reply. Alongside it, a referral and points programme brought customers back.</span><span class="zh">手工找达人又慢又随机。我用 AI 抓取加活跃度规则，建成结构化的联系名单，让外联先找最可能回复的人。同时用推荐和积分计划把老客拉回来复购。</span></p>
+          <div class="nums">
+            <div class="num-c"><b>1,300+</b><span><span class="en">creators listed</span><span class="zh">达人入库</span></span></div>
+            <div class="num-c"><b>+75%</b><span><span class="en">outreach efficiency</span><span class="zh">外联效率</span></span></div>
+          </div>
+          <div class="ring">
+            <svg width="120" height="120" viewBox="0 0 120 120" aria-label="Repeat purchase rate from 20% to 29%"><circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="14"/><circle id="ring-a" cx="60" cy="60" r="48" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round" stroke-dasharray="0 302" transform="rotate(-90 60 60)"/><text x="60" y="68" text-anchor="middle" fill="#fff" font-family="Syne,sans-serif" font-weight="800" font-size="26" id="ring-t">20%</text></svg>
+            <p><span class="en"><b>Repeat purchase ~20% → 29%</b><br>after the referral and points programme. I also drove onboarding with Chewy (signed), Walmart and Petco.</span><span class="zh"><b>复购率约 20% → 29%</b><br>来自推荐与积分计划。同时推动 Chewy（已签约）、Walmart、Petco 入驻。</span></p>
+          </div>
+        </div>
+        <div class="sky">
+          <canvas id="sky-cv" aria-label="Creator list visualisation"></canvas>
+          <div class="hud"><span><span class="en">creator pool</span><span class="zh">达人池</span> · <b>1,300+</b></span><span id="sky-mode"></span></div>
+          <div class="act"><button class="sw hot" id="sky-btn"><span class="en">Apply activity rules</span><span class="zh">应用活跃度规则</span></button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ch c-more pad" id="s-more" data-step>
+    <div class="wrap">
+      <div class="head"><div><p class="k" style="color:var(--sun)"><span class="en">And three more</span><span class="zh">再来三个</span></p><h2 style="margin-top:12px"><span class="en">Judgment, shipping, and agents.</span><span class="zh">判断力、交付力、agent 编排。</span></h2></div><div class="idx" style="opacity:.25">E</div></div>
+      <div class="more">
+        <div class="mc">
+          <p class="k" style="color:var(--mint)">AI customer service</p>
+          <h3><span class="en">Where humans stay in</span><span class="zh">哪里要人来把关</span></h3>
+          <p><span class="en">Tested on 4,011 offline cases. Real users showed full automation wasn't ready, so AI suggests and people confirm. Later the runtime moved to a platform agent; the knowledge base, risk rules and handover stayed ours.</span><span class="zh">离线测了 4,011 条。真人测试说明全自动还不行，于是改成 AI 给建议、人来确认。后来运行底座换成平台 agent，知识库、风险规则和人工接管仍是我们自己的。</span></p>
+          <div class="gate">
+            <label for="risk" class="illus"><span class="en">Try it: risk of the customer question</span><span class="zh">试一下：客户问题的风险等级</span></label>
+            <input id="risk" type="range" min="0" max="100" value="35">
+            <div class="route" id="route"></div>
+          </div>
+        </div>
+        <div class="mc">
+          <p class="k" style="color:var(--sky)">Shipped product</p>
+          <h3>Amazon Scraper Pro</h3>
+          <p><span class="en">A Chrome extension I built solo with AI coding tools and published.</span><span class="zh">我用 AI 编程工具独立做出并上架的 Chrome 插件。</span></p>
+          <div class="store">
+            <div class="row"><b>Amazon Scraper Pro</b><span class="stars" aria-label="5 stars">★★★★★</span></div>
+            <div class="row" style="font-size:13px;color:var(--mute)"><span>Chrome Web Store</span><span><b style="color:var(--ink)">390</b> installs</span></div>
+            <div style="font-size:12px;color:var(--mute)"><span class="en">85% of users in the US</span><span class="zh">85% 用户来自美国</span></div>
+            <div class="us"><i></i></div>
+          </div>
+        </div>
+        <div class="mc">
+          <p class="k" style="color:var(--coral)">Claude Projects / Skills, in practice</p>
+          <h3><span class="en">A 3-agent team</span><span class="zh">三 agent 协作</span></h3>
+          <p><span class="en">Claude, Codex and DeepSeek Harness run my job search on one status board, a fact ledger, shared skills and synced logs. When one is offline, another picks up.</span><span class="zh">Claude、Codex、DeepSeek Harness 共用一块状态板、一份事实台账、共享技能和同步记录来推进我的求职。一个下线，另一个就接上。</span></p>
+          <div class="agents" id="agents"><div class="ag" data-a="0"><b>Claude</b>research · write</div><div class="ag" data-a="1"><b>Codex</b>build · apply</div><div class="ag" data-a="2"><b>DSH</b>review · memory</div></div>
+          <div class="baton" id="baton"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="ch c-yours pad" id="s-yours" data-step>
+    <div class="wrap">
+      <div class="head"><div><p class="k" style="color:var(--cobalt)"><span class="en">Applied to your work</span><span class="zh">放到你们的项目里</span></p><h2 style="margin-top:12px"><span class="en">Where I'd plug in on cases you've already run.</span><span class="zh">在你们做过的案例里，我能接上哪一环。</span></h2></div><div class="idx">F</div></div>
+      <p style="color:var(--ink-2);max-width:64ch;margin-bottom:24px"><span class="en">From EternityX's public case studies. The campaign results are yours; the right-hand column is what an AI operations layer could add, based on what I have already built.</span><span class="zh">以下来自 EternityX 官网公开案例。投放成果属于你们团队；我写的是一层 AI 运营能补上什么，依据是我已经做过的事。</span></p>
+      <div class="yours">
+        <article class="yc">
+          <div class="top"><a href="https://www.eternityx.com/case-study/mcdonalds-hong-kong-2026-shogun-campaign-case-study/" target="_blank" rel="noopener">eternityx.com · case study</a><h3>McDonald's HK · Shogun 2026</h3><p><span class="en">90 KOLs/KOCs for mainland visitors in a seven-day window; 989K+ impressions, 700+ UGC posts.</span><span class="zh">面向内地游客，7 天窗口内调动 90 位 KOL/KOC；曝光 989K+，UGC 700+。</span></p></div>
+          <div class="mid"><span class="k"><span class="en">Where AI ops plugs in</span><span class="zh">AI 运营能补的环节</span></span><p><span class="en">An always-on creator pool scored by activity and fit, so the shortlist and briefs are ready on day one; UGC and mentions pulled into one daily report automatically.</span><span class="zh">一个常备的达人池，按活跃度和匹配度打分，第一天就能出名单和简报；UGC 和提及自动汇总成每日报表。</span></p></div>
+          <div class="bot"><b><span class="en">Done before:</span><span class="zh">我做过：</span></b> <span class="en">AI-sorted 1,300+ creators, outreach +75%</span><span class="zh">AI 筛选 1,300+ 达人，外联效率 +75%</span></div>
+        </article>
+        <article class="yc">
+          <div class="top"><a href="https://www.eternityx.com/case-study/hyatt-hotel-case-study/" target="_blank" rel="noopener">eternityx.com · case study</a><h3>Hyatt · Dubai Tourism · Kmart</h3><p><span class="en">Programmatic campaigns across WeChat, Huawei, Xiaohongshu and Chinese video platforms, reported against plan (e.g. Hyatt CPE −57%).</span><span class="zh">在微信、华为、小红书和中文视频平台的程序化投放，按计划考核（如 Hyatt CPE −57%）。</span></p></div>
+          <div class="mid"><span class="k"><span class="en">Where AI ops plugs in</span><span class="zh">AI 运营能补的环节</span></span><p><span class="en">One pipeline that pulls every platform's numbers into a single dashboard and flags CTR or CPE drift each morning, so account teams stop rebuilding the same report per market.</span><span class="zh">一条管道把各平台数据拉进同一个看板，每天早上提示 CTR、CPE 的异常波动，各市场团队不用再各自重做同一份报表。</span></p></div>
+          <div class="bot"><b><span class="en">Done before:</span><span class="zh">我做过：</span></b> <span class="en">4 sales channels and 3 warehouses folded into one pipeline</span><span class="zh">四类销售渠道、三个仓库并成一条管道</span></div>
+        </article>
+        <article class="yc">
+          <div class="top"><a href="https://www.eternityx.com/" target="_blank" rel="noopener">eternityx.com · research</a><h3><span class="en">Golden Week, Labour Day, Beyond Borders reports</span><span class="zh">黄金周、五一、Beyond Borders 等研究报告</span></h3><p><span class="en">Your research team already publishes travel and outbound-consumer insight.</span><span class="zh">你们的研究团队一直在发布出行和出海消费洞察。</span></p></div>
+          <div class="mid"><span class="k"><span class="en">Where AI ops plugs in</span><span class="zh">AI 运营能补的环节</span></span><p><span class="en">Turn each report into a BD alert: brands whose category is rising get a ready-made pitch brief. Add an "AI answer audit" to client proposals: how often ChatGPT or DeepSeek recommends the brand to Chinese travellers.</span><span class="zh">把每份报告变成 BD 预警：品类在升温的品牌，直接配好一份提案简报。再在客户方案里加一项“AI 答案体检”：ChatGPT、DeepSeek 向中国游客推荐这个品牌的频率。</span></p></div>
+          <div class="bot"><b><span class="en">Done before:</span><span class="zh">我做过：</span></b> <span class="en">GEO baseline and re-tests, AI citation 16.7% → 58.3%</span><span class="zh">GEO 基线与复测，AI 引用率 16.7% → 58.3%</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="ch c-calc pad" id="s-calc" data-step>
+    <div class="wrap">
+      <div class="head"><div><p class="k" style="color:var(--cobalt)"><span class="en">Your "operational hour reduction target"</span><span class="zh">对应 JD 的“运营工时削减目标”</span></p><h2 style="margin-top:12px"><span class="en">I size it before I build it.</span><span class="zh">动手之前，先算值不值。</span></h2></div></div>
+      <div class="calc">
+        <div style="display:grid;gap:18px">
+          <div class="field"><label for="c-n"><span><span class="en">Times a day</span><span class="zh">每天发生几次</span></span><output id="o-n"></output></label><input id="c-n" type="range" min="1" max="300" value="60"></div>
+          <div class="field"><label for="c-m"><span><span class="en">Minutes by hand</span><span class="zh">手工一次几分钟</span></span><output id="o-m"></output></label><input id="c-m" type="range" min="1" max="60" value="6"></div>
+          <div class="field"><label for="c-a"><span><span class="en">Share automation removes</span><span class="zh">自动化省掉的比例</span></span><output id="o-a"></output></label><input id="c-a" type="range" min="10" max="95" value="70"></div>
+          <div class="field"><label for="c-d"><span><span class="en">Working days a month</span><span class="zh">每月工作日</span></span><output id="o-d"></output></label><input id="c-d" type="range" min="15" max="26" value="22"></div>
+          <p class="illus"><span class="en">Defaults are an example, not results from my past work.</span><span class="zh">默认值只是示例，不是我过往项目的数据。</span></p>
+        </div>
+        <div class="out">
+          <small><span class="en">Hours given back every month</span><span class="zh">每月省下的工时</span></small>
+          <div class="big" id="c-out">0</div>
+          <small id="c-fte"></small>
+          <small><span class="en">Then three checks: who owns the result, where a human confirms, how we measure after launch.</span><span class="zh">再过三关：结果谁负责，哪一步要人确认，上线后怎么量化。</span></small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ch c-views pad" id="s-views" data-step>
+    <div class="wrap">
+      <div class="head"><div><p class="k" style="color:var(--cobalt)"><span class="en">How I see AI products</span><span class="zh">我怎么看 AI 产品</span></p><h2 style="margin-top:12px"><span class="en">Three beliefs. Ninety days.</span><span class="zh">三个判断，九十天。</span></h2></div></div>
+      <div class="views">
+        <div class="vw"><span class="big">↻</span><h3><span class="en">Value lives in the workflow</span><span class="zh">价值在工作流里</span></h3><p><span class="en">Models get better and cheaper. What lasts is a company's own data, rules and process around them.</span><span class="zh">模型会越来越强、越来越便宜，真正留得住的是企业自己的数据、规则和流程。</span></p></div>
+        <div class="vw"><span class="big">◐</span><h3><span class="en">Humans stay where risk is</span><span class="zh">风险高处留给人</span></h3><p><span class="en">Launch with a human gate and an audit log. Widen automation as it earns trust.</span><span class="zh">先带着人工确认和审计记录上线，跑稳了再一步步放开。</span></p></div>
+        <div class="vw"><span class="big">◎</span><h3><span class="en">AI answers are a media channel</span><span class="zh">AI 答案是新媒体渠道</span></h3><p><span class="en">Buyers ask ChatGPT before they search. Being cited in AI answers will sit next to paid media in a plan.</span><span class="zh">消费者先问 ChatGPT 再搜索。被 AI 答案引用，会和付费媒体一起出现在投放计划里。</span></p></div>
+      </div>
+      <div class="plan">
+        <div class="ph"><span class="k"><span class="en">Days 1–30 · Listen</span><span class="zh">第 1–30 天 · 摸清</span></span><h3><span class="en">Map the manual work</span><span class="zh">摸清手工活</span></h3><p><span class="en">Sit with BD, Marketing, Finance and Ops. List repeated tasks, size each in hours, agree two quick wins.</span><span class="zh">和 BD、市场、财务、运营坐下来，列出重复工作，逐项估工时，定两个速赢项目。</span></p></div>
+        <div class="ph"><span class="k"><span class="en">Days 31–60 · Ship</span><span class="zh">第 31–60 天 · 上线</span></span><h3><span class="en">Two quick wins live</span><span class="zh">两个速赢上线</span></h3><p><span class="en">Ship them on the low-code stack with a human gate, train users, start a weekly hours-saved report.</span><span class="zh">用低代码平台上线，保留人工确认，培训同事，开始每周汇报省下的工时。</span></p></div>
+        <div class="ph"><span class="k"><span class="en">Days 61–90 · Scale</span><span class="zh">第 61–90 天 · 放大</span></span><h3><span class="en">BD alerts, one pipeline</span><span class="zh">BD 预警，统一管道</span></h3><p><span class="en">A weekly BD intelligence brief from market and ad-industry signals; fold duplicated regional workflows into one.</span><span class="zh">用市场和广告行业信号做每周 BD 情报简报；把各区域重复流程合并成一条。</span></p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="pad">
+  <div class="wrap">
+    <h2><span class="en">Let's build it.</span><span class="zh">一起把它做出来。</span></h2>
+    <span class="c">Hong TANG · 唐鸿 · tanghocoal@outlook.com · linkedin.com/in/hom-tang-coal</span>
+    <span style="font-size:13px"><span class="en">Figures come from my own work records; company-internal details are left out.</span><span class="zh">数字来自我的工作记录；公司内部细节已略去。</span></span>
+  </div>
+</footer>
+
+<div class="pager" id="pager" hidden><span id="pg">1 / 10</span><button id="pg-p" aria-label="Previous">←</button><button id="pg-n" aria-label="Next">→</button><button id="pg-x" aria-label="Exit">✕</button></div>
+
+<script>
+(()=>{
+const R=document.documentElement, $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const L=()=>R.dataset.lang; const t=(e,z)=>L()==='zh'?z:e;
+let lang='en'; try{lang=localStorage.getItem('ht-lang')||'en'}catch(e){} R.dataset.lang=lang;
+const langHooks=[];
+function setLang(l){R.dataset.lang=l;R.lang=l==='zh'?'zh-Hans':'en';$('#lang-en').setAttribute('aria-pressed',l==='en');$('#lang-zh').setAttribute('aria-pressed',l==='zh');try{localStorage.setItem('ht-lang',l)}catch(e){};langHooks.forEach(f=>f());}
+$('#lang-en').onclick=()=>setLang('en'); $('#lang-zh').onclick=()=>setLang('zh');
+
+/* ticker */
+const tk=[['All staff','rolled out my AI assistant','自研 AI 助手全员上线'],['10→2–3 min','daily order handling','每日发货处理'],['16.7→58.3%','AI search citation','AI 搜索引用率'],['+75%','outreach efficiency','外联效率'],['1,300+','creators sourced by AI','AI 筛选达人'],['20→29%','repeat purchase','复购率'],['4,011','offline AI test cases','AI 离线测试样本'],['390','installs, 5★ extension','插件安装 · 5 星']];
+function renderTicker(){const h=tk.map(x=>`<span class="it"><b>${x[0]}</b>${t(x[1],x[2])}</span>`).join('');$('#ticker').innerHTML=h+h;}
+langHooks.push(renderTicker);
+
+/* ---------- flow engine (canvas) ---------- */
+function Flow(cv,{dark=true}={}){
+  const ctx=cv.getContext('2d'); let W=0,H=0,dpr=1, G={nodes:[],edges:[]}, P=[], spawnAcc=0, fail=null, onArrive=null, count=0, rate=1.6;
+  function size(){const r=cv.getBoundingClientRect();dpr=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+  new ResizeObserver(size).observe(cv); size();
+  const N=id=>G.nodes.find(n=>n.id===id);
+  const pos=n=>({x:n.x*W,y:n.y*H});
+  function outs(id){return G.edges.filter(e=>e[0]===id);}
+  function spawn(src,opts={}){const s=src||G.nodes.filter(n=>n.src)[Math.floor(Math.random()*G.nodes.filter(n=>n.src).length)];
+    const es=outs(s.id); if(!es.length) return; const e=es[Math.floor(Math.random()*es.length)];
+    P.push({e,t:0,v:(opts.slow?0.35:0.55)+Math.random()*0.35,c:s.color||'#7FD8FF',big:!!opts.big,id:opts.id,dead:false});}
+  function curve(a,b,t){const A=pos(N(a)),B=pos(N(b));const mx=(A.x+B.x)/2;
+    const x=(1-t)**3*A.x+3*(1-t)**2*t*mx+3*(1-t)*t*t*mx+t**3*B.x, y=(1-t)**3*A.y+3*(1-t)**2*t*A.y+3*(1-t)*t*t*B.y+t**3*B.y; return {x,y};}
+  function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+  let last=performance.now();
+  function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;
+    ctx.clearRect(0,0,W,H);
+    // edges
+    ctx.lineWidth=1.2;
+    G.edges.forEach(([a,b])=>{ctx.strokeStyle='rgba(180,200,255,.18)';ctx.beginPath();for(let i=0;i<=24;i++){const p=curve(a,b,i/24);i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y);}ctx.stroke();});
+    // spawn
+    if(!reduce&&rate>0){spawnAcc+=dt*rate;while(spawnAcc>1){spawnAcc--;spawn();}}
+    // particles
+    P.forEach(p=>{if(p.dead)return; p.t+=dt*p.v; const [a,b]=p.e;
+      if(p.t>=1){ if(onArrive&&p.big) onArrive(b,p);
+        if(fail&&b===fail){p.dead=true;p.failAt=b;failFx.push({n:b,life:1});return;}
+        const es=outs(b); if(!es.length){p.dead=true;count++;return;} p.e=es[Math.floor(Math.random()*es.length)]; p.t=0; }
+      const q=curve(p.e[0],p.e[1],Math.min(1,p.t)); const r=p.big?6:2.4;
+      ctx.fillStyle=p.big?'#FFC83D':p.c; ctx.shadowColor=ctx.fillStyle; ctx.shadowBlur=p.big?18:8; ctx.beginPath();ctx.arc(q.x,q.y,r,0,7);ctx.fill(); ctx.shadowBlur=0;});
+    P=P.filter(p=>!p.dead);
+    // nodes
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    G.nodes.forEach(n=>{const {x,y}=pos(n);const lab=t(n.en,n.zh);ctx.font=`${n.core?'700 13px':'500 11.5px'} Onest, "Noto Sans SC", sans-serif`;
+      const w=Math.max(ctx.measureText(lab).width+22,n.core?96:60), h=n.core?40:28;
+      rr(x-w/2,y-h/2,w,h,n.core?12:8); ctx.fillStyle=n.core?'#FFC83D':(n.human?'rgba(255,255,255,.04)':'rgba(255,255,255,.08)'); ctx.fill();
+      ctx.lineWidth=1.2; ctx.setLineDash(n.human?[4,3]:[]); ctx.strokeStyle=n.core?'#FFC83D':'rgba(200,215,255,.45)'; ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle=n.core?'#0B0E14':'#E7ECFF'; ctx.fillText(lab,x,y+.5);});
+    failFx.forEach(f=>{const {x,y}=pos(N(f.n));ctx.strokeStyle=`rgba(255,110,80,${f.life})`;ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,26+(1-f.life)*30,0,7);ctx.stroke();f.life-=dt*0.9;});
+    failFx=failFx.filter(f=>f.life>0);
+    requestAnimationFrame(frame);}
+  let failFx=[]; requestAnimationFrame(frame);
+  return {set(g){G=g;P=[];},spawn,setFail(id){fail=id},onArrive(f){onArrive=f},get count(){return count},rate(r){rate=r},N};
+}
+
+/* hero graph */
+const heroG={nodes:[
+  {id:'s1',x:.13,y:.16,en:'Shopify ×4',zh:'Shopify ×4',src:1,color:'#7FD8FF'},
+  {id:'s2',x:.13,y:.36,en:'Amazon',zh:'Amazon',src:1,color:'#FFB3A3'},
+  {id:'s3',x:.13,y:.56,en:'TikTok ×3',zh:'TikTok ×3',src:1,color:'#B6FFE6'},
+  {id:'s4',x:.13,y:.76,en:'Shopee',zh:'Shopee',src:1,color:'#FFE08A'},
+  {id:'ai',x:.5,y:.46,en:'AI pipeline · ERP',zh:'AI 管道 · ERP',core:1},
+  {id:'w1',x:.86,y:.26,en:'WH · HK',zh:'香港仓'},{id:'w2',x:.86,y:.46,en:'WH · SG',zh:'新加坡仓'},{id:'w3',x:.86,y:.66,en:'WH · US',zh:'美国仓'}],
+ edges:[['s1','ai'],['s2','ai'],['s3','ai'],['s4','ai'],['ai','w1'],['ai','w2'],['ai','w3']]};
+const hero=Flow($('#hero-cv')); hero.set(heroG); hero.rate(3.2);
+setInterval(()=>{$('#hero-count').textContent=hero.count.toLocaleString();},400);
+
+/* orders graph versions */
+const OG={
+ 1:{nodes:[{id:'a',x:.1,y:.5,en:'TikTok HK',zh:'TikTok 香港店',src:1,color:'#B6FFE6'},{id:'b',x:.3,y:.5,en:'Fetch',zh:'抓单'},{id:'c',x:.5,y:.5,en:'Parse label',zh:'解析面单'},{id:'d',x:.7,y:.5,en:'Human OK',zh:'人工确认',human:1},{id:'e',x:.9,y:.5,en:'WhatsApp',zh:'WhatsApp 群'}],
+    edges:[['a','b'],['b','c'],['c','d'],['d','e']]},
+ 2:{nodes:[{id:'a',x:.1,y:.5,en:'TikTok HK',zh:'TikTok 香港店',src:1,color:'#B6FFE6'},{id:'b',x:.3,y:.5,en:'Fetch + parse',zh:'抓单 + 解析'},{id:'c',x:.52,y:.5,en:'Lark agent',zh:'飞书 agent',core:1},{id:'d',x:.75,y:.3,en:'Confirm',zh:'确认',human:1},{id:'f',x:.75,y:.7,en:'Alerts',zh:'异常提醒'},{id:'e',x:.92,y:.5,en:'HK warehouse',zh:'香港仓'}],
+    edges:[['a','b'],['b','c'],['c','d'],['c','f'],['d','e'],['f','e']]},
+ 3:{nodes:[{id:'s1',x:.1,y:.15,en:'Shopify ×4',zh:'Shopify ×4',src:1,color:'#7FD8FF'},{id:'s2',x:.1,y:.38,en:'Amazon',zh:'Amazon',src:1,color:'#FFB3A3'},{id:'s3',x:.1,y:.62,en:'TikTok ×3',zh:'TikTok ×3',src:1,color:'#B6FFE6'},{id:'s4',x:.1,y:.85,en:'Shopee',zh:'Shopee',src:1,color:'#FFE08A'},
+    {id:'erp',x:.42,y:.5,en:'ERP',zh:'ERP',core:1},{id:'r',x:.64,y:.5,en:'Routing rules',zh:'分仓规则'},{id:'w1',x:.88,y:.25,en:'WH · HK',zh:'香港仓'},{id:'w2',x:.88,y:.5,en:'WH · SG',zh:'新加坡仓'},{id:'w3',x:.88,y:.75,en:'WH · US',zh:'美国仓'}],
+    edges:[['s1','erp'],['s2','erp'],['s3','erp'],['s4','erp'],['erp','r'],['r','w1'],['r','w2'],['r','w3']]}};
+const ord=Flow($('#ord-cv')); let ver=3; ord.set(OG[3]); ord.rate(2.2);
+const term=$('#term'); let busy=false;
+function intro(){term.innerHTML=t({1:'v1 · scripted pipeline, a person confirms before sending. Each order carries a state, so an interrupted run resumes without sending twice.',2:'v2 · moved onto the Lark assistant I built: confirmations and exception alerts in one workspace.',3:'v3 · ERP live: Shopify (4 markets), Amazon, TikTok Shop (3 stores) and Shopee flow straight to warehouses in HK, SG and the US. No hand-offs.'}[ver],
+  {1:'v1 · 脚本流水线，发送前有人工确认。每单有状态记录，中断后续跑不重复。',2:'v2 · 迁到我自己开发的飞书助手上：确认和异常提醒在同一个工作台。',3:'v3 · ERP 上线：Shopify 四个市场、Amazon、TikTok 三店、Shopee 的订单直接进香港、新加坡、美国仓，中间无需人工转手。'}[ver]);}
+function log(c,m){term.innerHTML+=`\n<span class="${c}">${m}</span>`;term.scrollTop=term.scrollHeight;}
+function setVer(v){ver=v;ord.setFail(null);ord.set(OG[v]);$$('[data-v]').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===v));intro();}
+$$('[data-v]').forEach(b=>b.onclick=()=>{busy=false;setVer(+b.dataset.v);});
+const oid=()=>'#'+(57000000+Math.floor(Math.random()*999999));
+$('#run').onclick=()=>{ord.setFail(null);const id=oid();const src=OG[ver].nodes.find(n=>n.src);term.innerHTML=t(`order ${id} received`,`收到订单 ${id}`);
+  ord.onArrive((nid,p)=>{if(p.id!==id)return;const n=ord.N(nid);const out=!OG[ver].edges.some(e=>e[0]===nid);
+    log(out?'ok':'',(out?'✓ ':'→ ')+t(n.en,n.zh)+(n.human?t('  · a person confirms','  · 人工确认'):'')+(out?t('  · done, state saved, no duplicate send','  · 完成，状态已记录，不会重复发送'):''));});
+  ord.spawn(src,{big:true,id,slow:true});};
+$('#incident').onclick=()=>{setVer(1);ord.setFail('c');term.innerHTML='';
+  const seq=[['', t('first live check · 7 real orders','第一次真实验证 · 7 单真实订单')],['bad',t('✗ 7 / 7 fail at "Parse label"','✗ 7 单全部卡在“解析面单”')],['note',t('→ stop patching in production','→ 停止在生产环境打补丁')],['note',t('→ add staging, per-order audit log, rule checks','→ 加测试环境、每单审计记录、规则校验')],['note',t('→ replay each failed order in staging','→ 在测试环境逐单复现')],['bad',t('root cause: a "continue printing" pop-up interrupts the run','根因：后台“继续打印”弹窗打断流程')],['ok',t('✓ fix + scheduled checks → relaunch','✓ 修复并加定时检测 → 重新上线')],['ok',t('✓ since then: 0 missed or wrong pushes','✓ 此后零漏推、零错推')]];
+  let i=0;const step=()=>{if(i>=seq.length)return;log(seq[i][0],seq[i][1]);if(i===5){ord.setFail(null);}i++;setTimeout(step,900);};step();};
+langHooks.push(intro);
+
+/* lark chat */
+const chat=[['me','Can you check stock for SKU-A12 in the HK warehouse and flag anything under 50?','帮我查一下香港仓 SKU-A12 的库存，低于 50 的标出来。'],
+ ['tool','→ tool: inventory.lookup(warehouse="HK", sku="A12")','→ 工具：inventory.lookup(仓库="HK", sku="A12")'],
+ ['ai','HK has 38 units of SKU-A12, below your 50 threshold. Want me to draft a transfer request from the SG warehouse?','香港仓 SKU-A12 剩 38 件，低于 50。要我起草一张从新加坡仓调货的申请吗？'],
+ ['me','Yes, draft it.','好，起草吧。'],
+ ['tool','→ tool: transfer.draft(from="SG", to="HK", sku="A12")','→ 工具：transfer.draft(从="SG", 到="HK", sku="A12")'],
+ ['ok','Draft ready. Tap to confirm before it is sent.','草稿已生成。点击确认后才会提交。']];
+let chatTimer=null;
+function playChat(){clearTimeout(chatTimer);const box=$('#msgs');box.innerHTML='';let i=0;const nx=()=>{if(i>=chat.length){chatTimer=setTimeout(playChat,5200);return;}const c=chat[i++];const d=document.createElement('div');d.className='bub '+c[0];d.textContent=t(c[1],c[2]);box.appendChild(d);chatTimer=setTimeout(nx,reduce?0:1300);};nx();}
+const ppl=$('#people'); ppl.innerHTML=Array.from({length:14},(_,i)=>`<span class="p">${'ABCDEFGHJKLMNP'[i]}</span>`).join('');
+let pOn=0; function people(){const ps=[...ppl.children];ps.forEach((p,i)=>p.classList.toggle('on',i<pOn));if(pOn<14){pOn++;setTimeout(people,reduce?0:160);}}
+langHooks.push(playChat);
+
+/* geo */
+const geoQ=['What litter works best for a multi-cat home?','多猫家庭用什么猫砂最好？'];
+const geoA=[`For multi-cat homes, look for strong clumping and odour control. <mark>One brand built for multi-cat households</mark> is often recommended for…`,`多猫家庭要看结团和控味。<mark>一款专为多猫家庭设计的品牌</mark>经常被推荐，因为……`];
+let geoTimer=null;
+function playGeo(){clearTimeout(geoTimer);$('#geo-q').textContent=t(geoQ[0],geoQ[1]);const full=t(geoA[0],geoA[1]);const el=$('#geo-a');
+  if(reduce){el.innerHTML=full;return;} const plain=full.replace(/<[^>]+>/g,'');let i=0;
+  const tick=()=>{i+=2;if(i>=plain.length){el.innerHTML=full;geoTimer=setTimeout(playGeo,6000);return;}el.textContent=plain.slice(0,i);geoTimer=setTimeout(tick,28);};tick();}
+langHooks.push(playGeo);
+
+/* growth sky */
+(function(){const cv=$('#sky-cv'),ctx=cv.getContext('2d');let W,H,dpr;const pts=[];let mode=0;
+ function size(){const r=cv.getBoundingClientRect();dpr=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+ new ResizeObserver(size).observe(cv);size();
+ for(let i=0;i<1300;i++){const keep=Math.random()<.28;pts.push({x:Math.random(),y:Math.random(),tx:0,ty:0,keep,a:Math.random()*6.28,s:.2+Math.random()*.5});}
+ const kept=pts.filter(p=>p.keep);kept.forEach((p,i)=>{const cols=Math.ceil(Math.sqrt(kept.length*1.8));p.gx=.18+(i%cols)/cols*.64;p.gy=.2+Math.floor(i/cols)/Math.ceil(kept.length/cols)*.62;});
+ function hud(){$('#sky-mode').textContent=mode?t('rules applied · shortlist first','已应用规则 · 先联系高匹配'):t('unsorted','未筛选');$('#sky-btn').innerHTML=mode?t('Reset','重置'):t('Apply activity rules','应用活跃度规则');}
+ $('#sky-btn').onclick=()=>{mode=1-mode;hud();};langHooks.push(hud);
+ function f(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.a+=.01*p.s;const bx=mode&&p.keep?p.gx:p.x+Math.cos(p.a)*.006,by=mode&&p.keep?p.gy:p.y+Math.sin(p.a)*.006;
+   p.cx=(p.cx??bx)+(bx-(p.cx??bx))*.06;p.cy=(p.cy??by)+(by-(p.cy??by))*.06;
+   const on=!mode||p.keep;ctx.fillStyle=on?(mode?'#FFC83D':'#FF9C85'):'rgba(255,156,133,.12)';ctx.beginPath();ctx.arc(p.cx*W,p.cy*H,mode&&p.keep?2.2:1.6,0,7);ctx.fill();});
+   requestAnimationFrame(f);} f(); hud();})();
+
+/* ring + bars on view */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;
+  if(e.target.id==='bars'){$$('#bars .fill').forEach(f=>f.style.width=f.dataset.w+'%');}
+  if(e.target.id==='ring-a'){let v=20;const ring=$('#ring-a'),tx=$('#ring-t');const go=()=>{ring.setAttribute('stroke-dasharray',`${v/100*301.6} 302`);tx.textContent=Math.round(v)+'%';if(v<29){v+=.25;requestAnimationFrame(go);}};go();}
+  if(e.target.id==='people'){pOn=0;people();}
+  io.unobserve(e.target);}),{threshold:.4});
+['#bars','#ring-a','#people'].forEach(s=>io.observe($(s)));
+$('#ring-a').setAttribute('stroke-dasharray',`${.2*301.6} 302`);
+
+/* AI CS gate */
+function route(){const v=+$('#risk').value;const el=$('#route');
+  el.innerHTML=v<30?t('<b>low risk</b> → AI drafts the reply, agent sends after a glance','<b>低风险</b> → AI 起草回复，客服看一眼后发送'):v<70?t('<b>medium</b> → AI suggests, a person edits and confirms','<b>中风险</b> → AI 给建议，人修改后确认'):t('<b>high risk</b> (refunds, complaints) → straight to a human','<b>高风险</b>（退款、投诉）→ 直接转人工');}
+$('#risk').oninput=route; langHooks.push(route);
+
+/* agents baton */
+const bat=[['Claude','reads the JD, drafts the portfolio, writes the hand-off log','读 JD、起草作品集、写交接日志'],['Codex','installs tools on the Mac, fills the application, checks the result','在 Mac 上装工具、填申请表、核验结果'],['DSH','reviews the work, keeps memory across sessions','复核产出，跨会话记忆']];
+let bi=0,batT=null;function baton(){clearTimeout(batT);$$('.ag').forEach((a,i)=>a.classList.toggle('on',i===bi));$('#baton').textContent=bat[bi][0]+': '+t(bat[bi][1],bat[bi][2]);bi=(bi+1)%3;batT=setTimeout(baton,2200);}
+langHooks.push(()=>{bi=(bi+2)%3;baton();});
+
+/* calculator */
+function calc(){const g=k=>+$('#c-'+k).value;const n=g('n'),m=g('m'),a=g('a'),d=g('d');
+  $('#o-n').textContent=n+t('/day','次/天');$('#o-m').textContent=m+t(' min',' 分钟');$('#o-a').textContent=a+'%';$('#o-d').textContent=d+t(' days',' 天');
+  const h=n*m*a/100*d/60;$('#c-out').textContent=Math.round(h).toLocaleString()+'h';$('#c-fte').textContent=t(`≈ ${(h/168).toFixed(2)} of a full-time person`,`≈ ${(h/168).toFixed(2)} 个全职人力`);}
+['n','m','a','d'].forEach(k=>$('#c-'+k).addEventListener('input',calc));langHooks.push(calc);
+
+/* JD board */
+const tiles=$$('.tile'),projs=$$('.proj');let act=null;
+function hits(){tiles.forEach(tl=>{const n=projs.filter(p=>p.dataset.p.includes(tl.dataset.pl)).length;tl.querySelector('.hits').textContent=t(n+' PROJECTS →',n+' 个项目 →');});}
+function apply(){tiles.forEach(tl=>tl.setAttribute('aria-pressed',tl.dataset.pl===act));projs.forEach(p=>{const h=!act||p.dataset.p.includes(act);p.classList.toggle('dim',!h);p.classList.toggle('lit',!!act&&h);});}
+tiles.forEach(tl=>tl.onclick=()=>{act=act===tl.dataset.pl?null:tl.dataset.pl;apply();});
+projs.forEach(p=>p.onclick=()=>$('#'+p.dataset.go).scrollIntoView({behavior:'smooth'}));
+langHooks.push(hits);
+
+/* presenter */
+const steps=$$('[data-step]'),pg=$('#pager');let cur=0;
+function go(i){cur=Math.max(0,Math.min(steps.length-1,i));steps[cur].scrollIntoView({behavior:'smooth',block:'start'});$('#pg').textContent=(cur+1)+' / '+steps.length;}
+$('#present').onclick=()=>{pg.hidden=false;go(0);};$('#pg-p').onclick=()=>go(cur-1);$('#pg-n').onclick=()=>go(cur+1);$('#pg-x').onclick=()=>pg.hidden=true;
+document.addEventListener('keydown',e=>{if(pg.hidden)return;if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur+1);}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur-1);}if(e.key==='Escape')pg.hidden=true;});
+
+setLang(R.dataset.lang); baton();
+})();
+</script>
+
+</body>
+</html>
