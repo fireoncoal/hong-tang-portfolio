@@ -10,7 +10,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
 <style>
 /* Concept: a campaign book. Each chapter is a colour-blocked "poster" with a live visual of the real system behind it. One flow engine drives the hero and the order pipeline. Single committed look. */
 :root{
@@ -27,9 +27,9 @@ html{scroll-behavior:smooth}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--b);font-size:16px;line-height:1.55;overflow-x:hidden}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:20;background:var(--paper)}
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
-:root[data-lang="en"] .zh{display:none} :root[data-lang="zh"] .en{display:none}
+:root[data-lang="en"] .zh,:root[data-lang="en"] .zht{display:none} :root[data-lang="zh"] .en,:root[data-lang="zh"] .zht{display:none} :root[data-lang="zht"] .en,:root[data-lang="zht"] .zh{display:none} :root[data-lang="zht"]{--d:"Syne","Noto Sans TC","Noto Sans SC",system-ui,sans-serif;--b:"Onest","Noto Sans TC","Noto Sans SC",system-ui,sans-serif}
 h1,h2,h3{font-family:var(--d);margin:0;line-height:1.02;text-wrap:balance}
-:root[data-lang="zh"] h1,:root[data-lang="zh"] h2,:root[data-lang="zh"] h3{font-weight:700;letter-spacing:0;line-height:1.15}
+:root[data-lang="zh"] h1,:root[data-lang="zh"] h2,:root[data-lang="zh"] h3,:root[data-lang="zht"] h1,:root[data-lang="zht"] h2,:root[data-lang="zht"] h3{font-weight:700;letter-spacing:0;line-height:1.15}
 p{margin:0}
 button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:3px solid var(--sun);outline-offset:3px}
@@ -46,6 +46,10 @@ button{font:inherit;color:inherit;cursor:pointer}
 .pill{border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600}
 .pill[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
 .pill.go{background:var(--cobalt);border-color:var(--cobalt);color:#fff}
+.logo{white-space:nowrap}
+.lang-seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:999px;overflow:hidden}
+.lang-seg .pill{border:0;border-radius:0;padding:6px 11px}
+@media (max-width:480px){.nav-r{flex-wrap:nowrap;gap:5px}.logo{font-size:16px}.pill{padding:6px 10px;font-size:12px}.lang-seg .pill{padding:6px 8px}}
 
 /* hero */
 .hero{position:relative;padding-block:48px 0}
@@ -100,7 +104,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .copy .steps li::before{content:attr(data-n);font-family:var(--m);font-size:12px;border:1.5px solid currentColor;border-radius:50%;width:24px;height:24px;display:grid;place-items:center}
 .nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-top:4px}
 .num-c{border-top:2px solid currentColor;padding-top:8px}
-.num-c b{display:block;font-family:var(--d);font-size:clamp(24px,2.4vw,30px);font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.05}
+.num-c b{display:block;white-space:nowrap;font-family:var(--d);font-size:clamp(20px,2vw,26px);font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.05}
 .num-c span{font-size:13px;opacity:.8}
 .illus{font-family:var(--m);font-size:11px;opacity:.7;letter-spacing:.06em}
 
@@ -237,9 +241,9 @@ footer .c{font-family:var(--m);font-size:14px;color:var(--sun)}
   <div class="wrap">
     <div class="logo">Hong TANG<span>.</span></div>
     <div class="nav-r">
-      <button class="pill go" id="present"><span class="en">▶ Present</span><span class="zh">▶ 演示模式</span></button>
-      <button class="pill" id="lang-en" aria-pressed="true">EN</button>
-      <button class="pill" id="lang-zh" aria-pressed="false">中文</button>
+      <button class="pill go" id="present"><span class="en">▶ Present</span><span class="zh">▶ 演示模式</span><span class="zht">▶ 演示模式</span></button>
+      <span class="lang-seg" role="group" aria-label="Language"><button class="pill" id="lang-en" aria-pressed="true">EN</button>
+      <button class="pill" id="lang-zh" aria-pressed="false" title="简体中文">简</button><button class="pill" id="lang-zht" aria-pressed="false" title="繁體中文">繁</button></span>
     </div>
   </div>
 </header>
@@ -248,16 +252,16 @@ footer .c{font-family:var(--m);font-size:14px;color:var(--sun)}
   <section class="hero" id="s-hero" data-step>
     <div class="wrap pad">
       <div>
-        <p class="k"><span class="en">AI Operation Specialist · EternityX · interview 6 Nov</span><span class="zh">AI Operation Specialist · EternityX · 11 月 6 日面试</span></p>
-        <h1 style="margin-top:16px"><span class="en">I build the <span class="hl">AI workflows</span> behind the work.</span><span class="zh">我搭的是工作背后的<span class="hl">AI 工作流</span>。</span></h1>
-        <p class="sub"><span class="en">At a cross-border DTC brand selling in the US, Hong Kong, Singapore and Australia, I find the bottleneck with data, build the fix with AI tools, get colleagues to use it, and measure what changed. The animation on the right simulates the order system I built.</span><span class="zh">在一家销往美国、香港、新加坡、澳洲的跨境电商品牌，我用数据找到卡点，用 AI 工具搭出解决方案，推动同事用起来，再量化变化。右边的动画，模拟的就是我搭的订单系统。</span></p>
+        <p class="k"><span class="en">AI Operation Specialist · EternityX · interview 6 Nov</span><span class="zh">AI Operation Specialist · EternityX · 11 月 6 日面试</span><span class="zht">AI Operation Specialist · EternityX · 11 月 6 日面試</span></p>
+        <h1 style="margin-top:16px"><span class="en">I build the <span class="hl">AI workflows</span> behind the work.</span><span class="zh">我搭的是工作背后的<span class="hl">AI 工作流</span>。</span><span class="zht">我搭的是工作背後的<span class="hl">AI 工作流</span>。</span></h1>
+        <p class="sub"><span class="en">At a cross-border DTC brand selling in the US, Hong Kong, Singapore and Australia, I find the bottleneck with data, build the fix with AI tools, get colleagues to use it, and measure what changed. The animation on the right simulates the order system I built.</span><span class="zh">在一家销往美国、香港、新加坡、澳洲的跨境电商品牌，我用数据找到卡点，用 AI 工具搭出解决方案，推动同事用起来，再量化变化。右边的动画，模拟的就是我搭的订单系统。</span><span class="zht">在一家銷往美國、香港、新加坡、澳洲的跨境電商品牌，我用數據找到卡點，用 AI 工具搭出解決方案，推動同事用起來，再量化變化。右邊的動畫，模擬的就是我搭的訂單系統。</span></p>
         <div class="who">
-          <span class="tagx">MSc HKBU · top 5%</span><span class="tagx">IANG</span><span class="tagx">EN · 普通话</span><span class="tagx">Claude · Codex · ChatGPT · Gemini</span>
+          <span class="tagx">MSc HKBU · top 5%</span><span class="tagx">IANG</span><span class="tagx">EN · <span class="en">普通话</span><span class="zh">普通话</span><span class="zht">普通話</span></span><span class="tagx">Claude · Codex · ChatGPT · Gemini</span>
         </div>
       </div>
       <div class="stage" id="hero-stage">
         <canvas id="hero-cv" aria-label="Animated diagram of orders flowing from sales channels through an AI pipeline to warehouses"></canvas>
-        <div class="cap"><span><span class="en">Simulation of my order system: channels → AI pipeline → warehouses</span><span class="zh">订单系统模拟：销售渠道 → AI 管道 → 仓库</span></span><span><span class="en">simulated</span><span class="zh">模拟演示</span> · <b id="hero-count">0</b></span></div>
+        <div class="cap"><span><span class="en">Simulation of my order system: channels → AI pipeline → warehouses</span><span class="zh">订单系统模拟：销售渠道 → AI 管道 → 仓库</span><span class="zht">訂單系統模擬：銷售渠道 → AI 管道 → 倉庫</span></span><span><span class="en">simulated</span><span class="zh">模拟演示</span><span class="zht">模擬演示</span> · <b id="hero-count">0</b></span></div>
       </div>
     </div>
     <div class="ticker" aria-hidden="true"><div class="row" id="ticker"></div></div>
@@ -265,53 +269,53 @@ footer .c{font-family:var(--m);font-size:14px;color:var(--sun)}
 
   <section class="jd pad" id="s-jd" data-step>
     <div class="wrap">
-      <p class="k"><span class="en">Your JD, my evidence</span><span class="zh">你们的 JD × 我的证据</span></p>
-      <h2 style="margin-top:12px"><span class="en">Four things you asked for. Pick one.</span><span class="zh">JD 要的四件事，点一个看看。</span></h2>
-      <p class="lead"><span class="en">Each tile is a responsibility from the job description. Pick one and the projects that prove it light up below.</span><span class="zh">每块对应 JD 里的一项职责。点一下，下面能证明它的项目就会亮起来。</span></p>
+      <p class="k"><span class="en">Your JD, my evidence</span><span class="zh">你们的 JD × 我的证据</span><span class="zht">你們的 JD × 我的證據</span></p>
+      <h2 style="margin-top:12px"><span class="en">Four things you asked for. Pick one.</span><span class="zh">JD 要的四件事，点一个看看。</span><span class="zht">JD 要的四件事，點一個看看。</span></h2>
+      <p class="lead"><span class="en">Each tile is a responsibility from the job description. Pick one and the projects that prove it light up below.</span><span class="zh">每块对应 JD 里的一项职责。点一下，下面能证明它的项目就会亮起来。</span><span class="zht">每塊對應 JD 裡的一項職責。點一下，下面能證明它的項目就會亮起來。</span></p>
       <div class="board">
-        <button class="tile t1" data-pl="growth" aria-pressed="false"><span class="num">01</span><div><h3><span class="en">Growth intelligence</span><span class="zh">增长情报</span></h3><q>Translate business intelligence into automated growth workflows…</q></div><span class="hits"></span></button>
-        <button class="tile t2" data-pl="transform" aria-pressed="false"><span class="num">02</span><div><h3><span class="en">Departmental AI</span><span class="zh">部门 AI 转型</span></h3><q>Implement AI-powered workflow solutions across departments…</q></div><span class="hits"></span></button>
-        <button class="tile t3" data-pl="automation" aria-pressed="false"><span class="num">03</span><div><h3><span class="en">One pipeline</span><span class="zh">统一管道</span></h3><q>Consolidate regional workflows into unified, scalable pipelines…</q></div><span class="hits"></span></button>
-        <button class="tile t4" data-pl="adoption" aria-pressed="false"><span class="num">04</span><div><h3><span class="en">Adoption</span><span class="zh">推广落地</span></h3><q>Track and report efficiency gains against operational targets…</q></div><span class="hits"></span></button>
+        <button class="tile t1" data-pl="growth" aria-pressed="false"><span class="num">01</span><div><h3><span class="en">Growth intelligence</span><span class="zh">增长情报</span><span class="zht">增長情報</span></h3><q>Translate business intelligence into automated growth workflows…</q></div><span class="hits"></span></button>
+        <button class="tile t2" data-pl="transform" aria-pressed="false"><span class="num">02</span><div><h3><span class="en">Departmental AI</span><span class="zh">部门 AI 转型</span><span class="zht">部門 AI 轉型</span></h3><q>Implement AI-powered workflow solutions across departments…</q></div><span class="hits"></span></button>
+        <button class="tile t3" data-pl="automation" aria-pressed="false"><span class="num">03</span><div><h3><span class="en">One pipeline</span><span class="zh">统一管道</span><span class="zht">統一管道</span></h3><q>Consolidate regional workflows into unified, scalable pipelines…</q></div><span class="hits"></span></button>
+        <button class="tile t4" data-pl="adoption" aria-pressed="false"><span class="num">04</span><div><h3><span class="en">Adoption</span><span class="zh">推广落地</span><span class="zht">推廣落地</span></h3><q>Track and report efficiency gains against operational targets…</q></div><span class="hits"></span></button>
       </div>
       <div class="shelf" id="shelf">
-        <button class="proj" data-p="transform adoption automation" data-go="s-lark"><span class="en">Lark AI assistant</span><span class="zh">飞书 AI 助手</span></button>
-        <button class="proj" data-p="automation transform adoption" data-go="s-orders"><span class="en">Order pipeline → ERP</span><span class="zh">订单管道 → ERP</span></button>
-        <button class="proj" data-p="growth" data-go="s-geo"><span class="en">GEO · AI search</span><span class="zh">GEO · AI 搜索</span></button>
-        <button class="proj" data-p="growth automation" data-go="s-growth"><span class="en">Creator sourcing</span><span class="zh">AI 找达人</span></button>
-        <button class="proj" data-p="transform" data-go="s-more"><span class="en">AI customer service</span><span class="zh">AI 客服</span></button>
-        <button class="proj" data-p="automation" data-go="s-more"><span class="en">Amazon Scraper Pro</span><span class="zh">Amazon 插件</span></button>
-        <button class="proj" data-p="transform automation adoption" data-go="s-more"><span class="en">3-agent system</span><span class="zh">三 agent 系统</span></button>
+        <button class="proj" data-p="transform adoption automation" data-go="s-lark"><span class="en">Lark AI assistant</span><span class="zh">飞书 AI 助手</span><span class="zht">飛書 AI 助手</span></button>
+        <button class="proj" data-p="automation transform adoption" data-go="s-orders"><span class="en">Order pipeline → ERP</span><span class="zh">订单管道 → ERP</span><span class="zht">訂單管道 → ERP</span></button>
+        <button class="proj" data-p="growth" data-go="s-geo"><span class="en">GEO · AI search</span><span class="zh">GEO · AI 搜索</span><span class="zht">GEO · AI 搜尋</span></button>
+        <button class="proj" data-p="growth automation" data-go="s-growth"><span class="en">Creator sourcing</span><span class="zh">AI 找达人</span><span class="zht">AI 找達人</span></button>
+        <button class="proj" data-p="transform" data-go="s-more"><span class="en">AI customer service</span><span class="zh">AI 客服</span><span class="zht">AI 客服</span></button>
+        <button class="proj" data-p="automation" data-go="s-more"><span class="en">Amazon Scraper Pro</span><span class="zh">Amazon 插件</span><span class="zht">Amazon 擴充功能</span></button>
+        <button class="proj" data-p="transform automation adoption" data-go="s-more"><span class="en">3-agent system</span><span class="zh">三 agent 系统</span><span class="zht">三 agent 系統</span></button>
       </div>
     </div>
   </section>
 
   <section class="ch c-orders pad" id="s-orders" data-step>
     <div class="wrap">
-      <div class="head"><div><p class="k" style="color:var(--sky)"><span class="en">03 · One pipeline</span><span class="zh">03 · 统一管道</span></p><h2 style="margin-top:12px"><span class="en">10 minutes of copy-paste, gone.</span><span class="zh">每天 10 分钟的复制粘贴，没了。</span></h2></div><div class="idx">A</div></div>
+      <div class="head"><div><p class="k" style="color:var(--sky)"><span class="en">03 · One pipeline</span><span class="zh">03 · 统一管道</span><span class="zht">03 · 統一管道</span></p><h2 style="margin-top:12px"><span class="en">10 minutes of copy-paste, gone.</span><span class="zh">每天 10 分钟的复制粘贴，没了。</span><span class="zht">每天 10 分鐘的複製貼上，沒了。</span></h2></div><div class="idx">A</div></div>
       <div class="split">
         <div class="copy">
-          <p><span class="en">A colleague used to log in to TikTok Shop every day, download each shipping label and post it to the Hong Kong warehouse's WhatsApp group. I rebuilt it in three versions, each removing a manual step. Requirements, design, testing, launch: mine, built with AI coding tools.</span><span class="zh">以前同事每天登录 TikTok 后台，逐个下载面单，再发到香港仓的 WhatsApp 群。我分三个版本重做，每一版去掉一个手工环节。需求、方案、测试、上线都由我负责，用 AI 编程工具开发。</span></p>
+          <p><span class="en">A colleague used to log in to TikTok Shop every day, download each shipping label and post it to the Hong Kong warehouse's WhatsApp group. I rebuilt it in three versions, each removing a manual step. Requirements, design, testing, launch: mine, built with AI coding tools.</span><span class="zh">以前同事每天登录 TikTok 后台，逐个下载面单，再发到香港仓的 WhatsApp 群。我分三个版本重做，每一版去掉一个手工环节。需求、方案、测试、上线都由我负责，用 AI 编程工具开发。</span><span class="zht">以前同事每天登入 TikTok 後台，逐個下載面單，再發到香港倉的 WhatsApp 群。我分三個版本重做，每一版去掉一個手工環節。需求、方案、測試、上線都由我負責，用 AI 編程工具開發。</span></p>
           <ol class="steps">
-            <li data-n="1"><span class="en">7 of 7 real orders failed on the first live check. I stopped patching in production.</span><span class="zh">第一次真实验证，7 单全部失败。我停止在生产环境打补丁。</span></li>
-            <li data-n="2"><span class="en">Added staging, a per-order audit log and rule checks before any send.</span><span class="zh">加测试环境、每单审计记录、发送前规则校验。</span></li>
-            <li data-n="3"><span class="en">Replayed failures one by one: a "continue printing" pop-up broke the run.</span><span class="zh">逐单复现，定位根因：后台一个“继续打印”弹窗打断了流程。</span></li>
+            <li data-n="1"><span class="en">7 of 7 real orders failed on the first live check. I stopped patching in production.</span><span class="zh">第一次真实验证，7 单全部失败。我停止在生产环境打补丁。</span><span class="zht">第一次真實驗證，7 單全部失敗。我停止在生產環境打補丁。</span></li>
+            <li data-n="2"><span class="en">Added staging, a per-order audit log and rule checks before any send.</span><span class="zh">加测试环境、每单审计记录、发送前规则校验。</span><span class="zht">加測試環境、每單審計記錄、發送前規則校驗。</span></li>
+            <li data-n="3"><span class="en">Replayed failures one by one: a "continue printing" pop-up broke the run.</span><span class="zh">逐单复现，定位根因：后台一个“继续打印”弹窗打断了流程。</span><span class="zht">逐單重現，定位根因：後台一個「繼續打印」彈窗打斷了流程。</span></li>
           </ol>
           <div class="nums">
-            <div class="num-c"><b>10→2–3</b><span><span class="en">minutes a day</span><span class="zh">每日分钟数</span></span></div>
-            <div class="num-c"><b>600+</b><span><span class="en">orders on peak days</span><span class="zh">高峰日订单</span></span></div>
-            <div class="num-c"><b>1,500+</b><span><span class="en">before the ERP switch</span><span class="zh">切 ERP 前累计</span></span></div>
-            <div class="num-c"><b>0</b><span><span class="en">missed or wrong pushes</span><span class="zh">漏推、错推</span></span></div>
+            <div class="num-c"><b>10→2–3</b><span><span class="en">minutes a day</span><span class="zh">每日分钟数</span><span class="zht">每日分鐘數</span></span></div>
+            <div class="num-c"><b>600+</b><span><span class="en">orders on peak days</span><span class="zh">高峰日订单</span><span class="zht">高峰日訂單</span></span></div>
+            <div class="num-c"><b>1,500+</b><span><span class="en">before the ERP switch</span><span class="zh">切 ERP 前累计</span><span class="zht">切 ERP 前累計</span></span></div>
+            <div class="num-c"><b>0</b><span><span class="en">missed or wrong pushes</span><span class="zh">漏推、错推</span><span class="zht">漏推、錯推</span></span></div>
           </div>
         </div>
         <div class="panel">
           <div class="ctrl">
             <div class="g" role="group" aria-label="Version">
-              <button class="sw" data-v="1" aria-pressed="false">v1 · <span class="en">Script</span><span class="zh">脚本</span></button>
-              <button class="sw" data-v="2" aria-pressed="false">v2 · <span class="en">Lark agent</span><span class="zh">飞书 agent</span></button>
+              <button class="sw" data-v="1" aria-pressed="false">v1 · <span class="en">Script</span><span class="zh">脚本</span><span class="zht">腳本</span></button>
+              <button class="sw" data-v="2" aria-pressed="false">v2 · <span class="en">Lark agent</span><span class="zh">飞书 agent</span><span class="zht">飛書 agent</span></button>
               <button class="sw" data-v="3" aria-pressed="true">v3 · ERP</button>
             </div>
-            <div class="g"><button class="sw hot" id="run"><span class="en">▶ Run one order</span><span class="zh">▶ 跑一单</span></button><button class="sw" id="incident"><span class="en">Replay the failure</span><span class="zh">回放故障</span></button></div>
+            <div class="g"><button class="sw hot" id="run"><span class="en">▶ Run one order</span><span class="zh">▶ 跑一单</span><span class="zht">▶ 跑一單</span></button><button class="sw" id="incident"><span class="en">Replay the failure</span><span class="zh">回放故障</span><span class="zht">回放故障</span></button></div>
           </div>
           <div class="flow"><canvas id="ord-cv" aria-label="Order pipeline animation"></canvas></div>
           <div class="term" id="term" aria-live="polite"></div>
@@ -322,26 +326,26 @@ footer .c{font-family:var(--m);font-size:14px;color:var(--sun)}
 
   <section class="ch c-lark pad" id="s-lark" data-step>
     <div class="wrap">
-      <div class="head"><div><p class="k" style="color:#0B8A66"><span class="en">02 · Departmental AI · 04 · Adoption</span><span class="zh">02 · 部门 AI · 04 · 推广落地</span></p><h2 style="margin-top:12px"><span class="en">An assistant people open every day.</span><span class="zh">同事每天都会打开的 AI 助手。</span></h2></div><div class="idx">B</div></div>
+      <div class="head"><div><p class="k" style="color:#0B8A66"><span class="en">02 · Departmental AI · 04 · Adoption</span><span class="zh">02 · 部门 AI · 04 · 推广落地</span><span class="zht">02 · 部門 AI · 04 · 推廣落地</span></p><h2 style="margin-top:12px"><span class="en">An assistant people open every day.</span><span class="zh">同事每天都会打开的 AI 助手。</span><span class="zht">同事每天都會打開的 AI 助手。</span></h2></div><div class="idx">B</div></div>
       <div class="split">
         <div class="copy">
-          <p><span class="en">I led the 0-to-1 delivery on Lark: interviews, solution design, acceptance, rollout and training. It answers from our own knowledge base (RAG) and can act, because 15 everyday business actions are wrapped as tools. After all-staff rollout I extended it to performance reviews.</span><span class="zh">在飞书上从 0 到 1 落地：访谈、方案、验收、推广、培训都由我负责。它基于我们自己的知识库（RAG）回答，也能直接办事，因为 15 个日常业务动作都做成了工具。全员上线后，又扩展到绩效考核。</span></p>
+          <p><span class="en">I led the 0-to-1 delivery on Lark: interviews, solution design, acceptance, rollout and training. It answers from our own knowledge base (RAG) and can act, because 15 everyday business actions are wrapped as tools. After all-staff rollout I extended it to performance reviews.</span><span class="zh">在飞书上从 0 到 1 落地：访谈、方案、验收、推广、培训都由我负责。它基于我们自己的知识库（RAG）回答，也能直接办事，因为 15 个日常业务动作都做成了工具。全员上线后，又扩展到绩效考核。</span><span class="zht">在飛書上從 0 到 1 落地：訪談、方案、驗收、推廣、培訓都由我負責。它基於我們自己的知識庫（RAG）回答，也能直接辦事，因為 15 個日常業務動作都做成了工具。全員上線後，又擴展到績效考核。</span></p>
           <div>
-            <p class="k" style="color:var(--mute)"><span class="en">E-commerce team using it</span><span class="zh">电商部在用的同事</span></p>
+            <p class="k" style="color:var(--mute)"><span class="en">E-commerce team using it</span><span class="zh">电商部在用的同事</span><span class="zht">電商部在用的同事</span></p>
             <div class="people" id="people"></div>
           </div>
           <div class="nums">
-            <div class="num-c"><b>14/14</b><span><span class="en">colleagues</span><span class="zh">位同事</span></span></div>
-            <div class="num-c"><b id="calls">100+</b><span><span class="en">calls a day</span><span class="zh">每天调用</span></span></div>
-            <div class="num-c"><b>15</b><span><span class="en">actions as tools</span><span class="zh">业务动作工具</span></span></div>
+            <div class="num-c"><b>14/14</b><span><span class="en">colleagues</span><span class="zh">位同事</span><span class="zht">位同事</span></span></div>
+            <div class="num-c"><b id="calls">100+</b><span><span class="en">calls a day</span><span class="zh">每天调用</span><span class="zht">每天調用</span></span></div>
+            <div class="num-c"><b>15</b><span><span class="en">actions as tools</span><span class="zh">业务动作工具</span><span class="zht">業務動作工具</span></span></div>
           </div>
         </div>
         <div>
           <div class="chat">
-            <div class="top"><div class="dot">AI</div><div><b><span class="en">Ops Assistant</span><span class="zh">运营助手</span></b><small>Lark · RAG + agent</small></div></div>
+            <div class="top"><div class="dot">AI</div><div><b><span class="en">Ops Assistant</span><span class="zh">运营助手</span><span class="zht">營運助手</span></b><small>Lark · RAG + agent</small></div></div>
             <div class="msgs" id="msgs"></div>
           </div>
-          <p class="illus" style="margin-top:8px"><span class="en">Illustrative conversation. Real tools and data stay internal.</span><span class="zh">示意对话，真实工具和数据不对外展示。</span></p>
+          <p class="illus" style="margin-top:8px"><span class="en">Illustrative conversation. Real tools and data stay internal.</span><span class="zh">示意对话，真实工具和数据不对外展示。</span><span class="zht">示意對話，真實工具和數據不對外展示。</span></p>
         </div>
       </div>
     </div>
@@ -349,15 +353,15 @@ footer .c{font-family:var(--m);font-size:14px;color:var(--sun)}
 
   <section class="ch c-geo pad" id="s-geo" data-step>
     <div class="wrap">
-      <div class="head"><div><p class="k"><span class="en">01 · Growth intelligence</span><span class="zh">01 · 增长情报</span></p><h2 style="margin-top:12px"><span class="en">When buyers ask AI, we show up.</span><span class="zh">消费者问 AI 时，答案里有我们。</span></h2></div><div class="idx">C</div></div>
+      <div class="head"><div><p class="k"><span class="en">01 · Growth intelligence</span><span class="zh">01 · 增长情报</span><span class="zht">01 · 增長情報</span></p><h2 style="margin-top:12px"><span class="en">When buyers ask AI, we show up.</span><span class="zh">消费者问 AI 时，答案里有我们。</span><span class="zht">消費者問 AI 時，答案裡有我們。</span></h2></div><div class="idx">C</div></div>
       <div class="split">
         <div class="copy">
-          <p><span class="en">I built a fixed-question baseline with the ChatGPT and Gemini APIs, wrote content for real buyer questions in four languages, fixed inaccurate claims on the site, then re-tested the same way and withdrew conclusions that didn't hold. Then I tracked it to orders with UTM.</span><span class="zh">用 ChatGPT 和 Gemini 接口建立固定问题基线，针对真实购买问题写四种语言的内容，修正网站上不准确的说法，再同口径复测，不成立的结论撤回。最后用 UTM 追到订单。</span></p>
+          <p><span class="en">I built a fixed-question baseline with the ChatGPT and Gemini APIs, wrote content for real buyer questions in four languages, fixed inaccurate claims on the site, then re-tested the same way and withdrew conclusions that didn't hold. Then I tracked it to orders with UTM.</span><span class="zh">用 ChatGPT 和 Gemini 接口建立固定问题基线，针对真实购买问题写四种语言的内容，修正网站上不准确的说法，再同口径复测，不成立的结论撤回。最后用 UTM 追到订单。</span><span class="zht">用 ChatGPT 和 Gemini API 建立固定問題基線，針對真實購買問題寫四種語言的內容，修正網站上不準確的說法，再同口徑重測，不成立的結論撤回。最後用 UTM 追到訂單。</span></p>
           <div class="bars" id="bars">
-            <div class="bar"><div class="lbl"><span><span class="en">Before</span><span class="zh">优化前</span></span><span>16.7%</span></div><div class="track"><div class="fill" data-w="16.7"></div></div></div>
-            <div class="bar"><div class="lbl"><span><span class="en">After</span><span class="zh">优化后</span></span><span>58.3%</span></div><div class="track"><div class="fill" data-w="58.3"></div></div></div>
+            <div class="bar"><div class="lbl"><span><span class="en">Before</span><span class="zh">优化前</span><span class="zht">優化前</span></span><span>16.7%</span></div><div class="track"><div class="fill" data-w="16.7"></div></div></div>
+            <div class="bar"><div class="lbl"><span><span class="en">After</span><span class="zh">优化后</span><span class="zht">優化後</span></span><span>58.3%</span></div><div class="track"><div class="fill" data-w="58.3"></div></div></div>
           </div>
-          <p class="illus"><span class="en">Share of fixed questions where AI cites us · US site</span><span class="zh">美国站固定问题集里被 AI 引用的比例</span></p>
+          <p class="illus"><span class="en">Share of fixed questions where AI cites us · US site</span><span class="zh">美国站固定问题集里被 AI 引用的比例</span><span class="zht">美國站固定問題集裡被 AI 引用的比例</span></p>
           <div class="receipt">
             <div class="rc"><span>AI RECOMMENDATIONS · 4 MARKETS</span><b>+40%</b></div>
             <div class="rc"><span>SHOPIFY UTM · source=chatgpt</span><b>2 orders</b></div>
@@ -366,7 +370,7 @@ footer .c{font-family:var(--m);font-size:14px;color:var(--sun)}
         <div class="answer">
           <div class="q"><span class="ic">?</span><span id="geo-q"></span></div>
           <div class="txt" id="geo-a"></div>
-          <p class="illus"><span class="en">Illustrative AI answer. Brand name withheld.</span><span class="zh">示意 AI 回答，品牌名已隐去。</span></p>
+          <p class="illus"><span class="en">Illustrative AI answer. Brand name withheld.</span><span class="zh">示意 AI 回答，品牌名已隐去。</span><span class="zht">示意 AI 回答，品牌名已隱去。</span></p>
         </div>
       </div>
     </div>
@@ -374,23 +378,23 @@ footer .c{font-family:var(--m);font-size:14px;color:var(--sun)}
 
   <section class="ch c-growth pad" id="s-growth" data-step>
     <div class="wrap">
-      <div class="head"><div><p class="k" style="color:#FFE2D9"><span class="en">01 · Lead prospecting · outbound</span><span class="zh">01 · 线索挖掘 · 外联</span></p><h2 style="margin-top:12px"><span class="en">1,300+ creators, sorted by AI.</span><span class="zh">1,300+ 达人，交给 AI 来筛。</span></h2></div><div class="idx">D</div></div>
+      <div class="head"><div><p class="k" style="color:#FFE2D9"><span class="en">01 · Lead prospecting · outbound</span><span class="zh">01 · 线索挖掘 · 外联</span><span class="zht">01 · 線索挖掘 · 外聯</span></p><h2 style="margin-top:12px"><span class="en">1,300+ creators, sorted by AI.</span><span class="zh">1,300+ 达人，交给 AI 来筛。</span><span class="zht">1,300+ 達人，交給 AI 來篩。</span></h2></div><div class="idx">D</div></div>
       <div class="split">
         <div class="copy">
-          <p><span class="en">Manual creator search was slow and random. I used AI scraping plus activity rules to build a structured contact list, so outreach went to the creators most likely to reply. Alongside it, a referral and points programme brought customers back.</span><span class="zh">手工找达人又慢又随机。我用 AI 抓取加活跃度规则，建成结构化的联系名单，让外联先找最可能回复的人。同时用推荐和积分计划把老客拉回来复购。</span></p>
+          <p><span class="en">Manual creator search was slow and random. I used AI scraping plus activity rules to build a structured contact list, so outreach went to the creators most likely to reply. Alongside it, a referral and points programme brought customers back.</span><span class="zh">手工找达人又慢又随机。我用 AI 抓取加活跃度规则，建成结构化的联系名单，让外联先找最可能回复的人。同时用推荐和积分计划把老客拉回来复购。</span><span class="zht">手工找達人又慢又隨機。我用 AI 抓取加活躍度規則，建成結構化的聯繫名單，讓外聯先找最可能回覆的人。同時用推薦和積分計劃把老客拉回來回購。</span></p>
           <div class="nums">
-            <div class="num-c"><b>1,300+</b><span><span class="en">creators listed</span><span class="zh">达人入库</span></span></div>
-            <div class="num-c"><b>+75%</b><span><span class="en">outreach efficiency</span><span class="zh">外联效率</span></span></div>
+            <div class="num-c"><b>1,300+</b><span><span class="en">creators listed</span><span class="zh">达人入库</span><span class="zht">達人入庫</span></span></div>
+            <div class="num-c"><b>+75%</b><span><span class="en">outreach efficiency</span><span class="zh">外联效率</span><span class="zht">外聯效率</span></span></div>
           </div>
           <div class="ring">
             <svg width="120" height="120" viewBox="0 0 120 120" aria-label="Repeat purchase rate from 20% to 29%"><circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="14"/><circle id="ring-a" cx="60" cy="60" r="48" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round" stroke-dasharray="0 302" transform="rotate(-90 60 60)"/><text x="60" y="68" text-anchor="middle" fill="#fff" font-family="Syne,sans-serif" font-weight="800" font-size="26" id="ring-t">20%</text></svg>
-            <p><span class="en"><b>Repeat purchase ~20% → 29%</b><br>after the referral and points programme. I also drove onboarding with Chewy (signed), Walmart and Petco.</span><span class="zh"><b>复购率约 20% → 29%</b><br>来自推荐与积分计划。同时推动 Chewy（已签约）、Walmart、Petco 入驻。</span></p>
+            <p><span class="en"><b>Repeat purchase ~20% → 29%</b><br>after the referral and points programme. I also drove onboarding with Chewy (signed), Walmart and Petco.</span><span class="zh"><b>复购率约 20% → 29%</b><br>来自推荐与积分计划。同时推动 Chewy（已签约）、Walmart、Petco 入驻。</span><span class="zht"><b>回購率約 20% → 29%</b><br>來自推薦與積分計劃。同時推動 Chewy（已簽約）、Walmart、Petco 入駐。</span></p>
           </div>
         </div>
         <div class="sky">
           <canvas id="sky-cv" aria-label="Creator list visualisation"></canvas>
-          <div class="hud"><span><span class="en">creator pool</span><span class="zh">达人池</span> · <b>1,300+</b></span><span id="sky-mode"></span></div>
-          <div class="act"><button class="sw hot" id="sky-btn"><span class="en">Apply activity rules</span><span class="zh">应用活跃度规则</span></button></div>
+          <div class="hud"><span><span class="en">creator pool</span><span class="zh">达人池</span><span class="zht">達人池</span> · <b>1,300+</b></span><span id="sky-mode"></span></div>
+          <div class="act"><button class="sw hot" id="sky-btn"><span class="en">Apply activity rules</span><span class="zh">应用活跃度规则</span><span class="zht">應用活躍度規則</span></button></div>
         </div>
       </div>
     </div>
@@ -398,14 +402,14 @@ footer .c{font-family:var(--m);font-size:14px;color:var(--sun)}
 
   <section class="ch c-more pad" id="s-more" data-step>
     <div class="wrap">
-      <div class="head"><div><p class="k" style="color:var(--sun)"><span class="en">And three more</span><span class="zh">再来三个</span></p><h2 style="margin-top:12px"><span class="en">Judgment, shipping, and agents.</span><span class="zh">判断力、交付力、agent 编排。</span></h2></div><div class="idx" style="opacity:.25">E</div></div>
+      <div class="head"><div><p class="k" style="color:var(--sun)"><span class="en">And three more</span><span class="zh">再来三个</span><span class="zht">再來三個</span></p><h2 style="margin-top:12px"><span class="en">Judgment, shipping, and agents.</span><span class="zh">判断力、交付力、agent 编排。</span><span class="zht">判斷力、交付力、agent 編排。</span></h2></div><div class="idx" style="opacity:.25">E</div></div>
       <div class="more">
         <div class="mc">
           <p class="k" style="color:var(--mint)">AI customer service</p>
-          <h3><span class="en">Where humans stay in</span><span class="zh">哪里要人来把关</span></h3>
-          <p><span class="en">Tested on 4,011 offline cases. Real users showed full automation wasn't ready, so AI suggests and people confirm. Later the runtime moved to a platform agent; the knowledge base, risk rules and handover stayed ours.</span><span class="zh">离线测了 4,011 条。真人测试说明全自动还不行，于是改成 AI 给建议、人来确认。后来运行底座换成平台 agent，知识库、风险规则和人工接管仍是我们自己的。</span></p>
+          <h3><span class="en">Where humans stay in</span><span class="zh">哪里要人来把关</span><span class="zht">哪裡要人來把關</span></h3>
+          <p><span class="en">Tested on 4,011 offline cases. Real users showed full automation wasn't ready, so AI suggests and people confirm. Later the runtime moved to a platform agent; the knowledge base, risk rules and handover stayed ours.</span><span class="zh">离线测了 4,011 条。真人测试说明全自动还不行，于是改成 AI 给建议、人来确认。后来运行底座换成平台 agent，知识库、风险规则和人工接管仍是我们自己的。</span><span class="zht">離線測了 4,011 條。真人測試說明全自動還不行，於是改成 AI 給建議、人來確認。後來運行底座換成平台 agent，知識庫、風險規則和人工接管仍是我們自己的。</span></p>
           <div class="gate">
-            <label for="risk" class="illus"><span class="en">Try it: risk of the customer question</span><span class="zh">试一下：客户问题的风险等级</span></label>
+            <label for="risk" class="illus"><span class="en">Try it: risk of the customer question</span><span class="zh">试一下：客户问题的风险等级</span><span class="zht">試一下：客戶問題的風險等級</span></label>
             <input id="risk" type="range" min="0" max="100" value="35">
             <div class="route" id="route"></div>
           </div>
@@ -413,18 +417,18 @@ footer .c{font-family:var(--m);font-size:14px;color:var(--sun)}
         <div class="mc">
           <p class="k" style="color:var(--sky)">Shipped product</p>
           <h3>Amazon Scraper Pro</h3>
-          <p><span class="en">A Chrome extension I built solo with AI coding tools and published.</span><span class="zh">我用 AI 编程工具独立做出并上架的 Chrome 插件。</span></p>
+          <p><span class="en">A Chrome extension I built solo with AI coding tools and published.</span><span class="zh">我用 AI 编程工具独立做出并上架的 Chrome 插件。</span><span class="zht">我用 AI 編程工具獨立做出並上架的 Chrome 擴充功能。</span></p>
           <div class="store">
             <div class="row"><b>Amazon Scraper Pro</b><span class="stars" aria-label="5 stars">★★★★★</span></div>
             <div class="row" style="font-size:13px;color:var(--mute)"><span>Chrome Web Store</span><span><b style="color:var(--ink)">390</b> installs</span></div>
-            <div style="font-size:12px;color:var(--mute)"><span class="en">85% of users in the US</span><span class="zh">85% 用户来自美国</span></div>
+            <div style="font-size:12px;color:var(--mute)"><span class="en">85% of users in the US</span><span class="zh">85% 用户来自美国</span><span class="zht">85% 用戶來自美國</span></div>
             <div class="us"><i></i></div>
           </div>
         </div>
         <div class="mc">
           <p class="k" style="color:var(--coral)">Claude Projects / Skills, in practice</p>
-          <h3><span class="en">A 3-agent team</span><span class="zh">三 agent 协作</span></h3>
-          <p><span class="en">Claude, Codex and DeepSeek Harness run my job search on one status board, a fact ledger, shared skills and synced logs. When one is offline, another picks up.</span><span class="zh">Claude、Codex、DeepSeek Harness 共用一块状态板、一份事实台账、共享技能和同步记录来推进我的求职。一个下线，另一个就接上。</span></p>
+          <h3><span class="en">A 3-agent team</span><span class="zh">三 agent 协作</span><span class="zht">三 agent 協作</span></h3>
+          <p><span class="en">Claude, Codex and DeepSeek Harness run my job search on one status board, a fact ledger, shared skills and synced logs. When one is offline, another picks up.</span><span class="zh">Claude、Codex、DeepSeek Harness 共用一块状态板、一份事实台账、共享技能和同步记录来推进我的求职。一个下线，另一个就接上。</span><span class="zht">Claude、Codex、DeepSeek Harness 共用一塊狀態板、一份事實台賬、共享技能和同步記錄來推進我的求職。一個下線，另一個就接上。</span></p>
           <div class="agents" id="agents"><div class="ag" data-a="0"><b>Claude</b>research · write</div><div class="ag" data-a="1"><b>Codex</b>build · apply</div><div class="ag" data-a="2"><b>DSH</b>review · memory</div></div>
           <div class="baton" id="baton"></div>
         </div>
@@ -435,23 +439,23 @@ footer .c{font-family:var(--m);font-size:14px;color:var(--sun)}
 
   <section class="ch c-yours pad" id="s-yours" data-step>
     <div class="wrap">
-      <div class="head"><div><p class="k" style="color:var(--cobalt)"><span class="en">Applied to your work</span><span class="zh">放到你们的项目里</span></p><h2 style="margin-top:12px"><span class="en">Where I'd plug in on cases you've already run.</span><span class="zh">在你们做过的案例里，我能接上哪一环。</span></h2></div><div class="idx">F</div></div>
-      <p style="color:var(--ink-2);max-width:64ch;margin-bottom:24px"><span class="en">From EternityX's public case studies. The campaign results are yours; the right-hand column is what an AI operations layer could add, based on what I have already built.</span><span class="zh">以下来自 EternityX 官网公开案例。投放成果属于你们团队；我写的是一层 AI 运营能补上什么，依据是我已经做过的事。</span></p>
+      <div class="head"><div><p class="k" style="color:var(--cobalt)"><span class="en">Applied to your work</span><span class="zh">放到你们的项目里</span><span class="zht">放到你們的項目裡</span></p><h2 style="margin-top:12px"><span class="en">Where I'd plug in on cases you've already run.</span><span class="zh">在你们做过的案例里，我能接上哪一环。</span><span class="zht">在你們做過的案例裡，我能接上哪一環。</span></h2></div><div class="idx">F</div></div>
+      <p style="color:var(--ink-2);max-width:64ch;margin-bottom:24px"><span class="en">From EternityX's public case studies. The campaign results are yours; the right-hand column is what an AI operations layer could add, based on what I have already built.</span><span class="zh">以下来自 EternityX 官网公开案例。投放成果属于你们团队；我写的是一层 AI 运营能补上什么，依据是我已经做过的事。</span><span class="zht">以下來自 EternityX 官網公開案例。投放成果屬於你們團隊；我寫的是一層 AI 營運能補上什麼，依據是我已經做過的事。</span></p>
       <div class="yours">
         <article class="yc">
-          <div class="top"><a href="https://www.eternityx.com/case-study/mcdonalds-hong-kong-2026-shogun-campaign-case-study/" target="_blank" rel="noopener">eternityx.com · case study</a><h3>McDonald's HK · Shogun 2026</h3><p><span class="en">90 KOLs/KOCs for mainland visitors in a seven-day window; 989K+ impressions, 700+ UGC posts.</span><span class="zh">面向内地游客，7 天窗口内调动 90 位 KOL/KOC；曝光 989K+，UGC 700+。</span></p></div>
-          <div class="mid"><span class="k"><span class="en">Where AI ops plugs in</span><span class="zh">AI 运营能补的环节</span></span><p><span class="en">An always-on creator pool scored by activity and fit, so the shortlist and briefs are ready on day one; UGC and mentions pulled into one daily report automatically.</span><span class="zh">一个常备的达人池，按活跃度和匹配度打分，第一天就能出名单和简报；UGC 和提及自动汇总成每日报表。</span></p></div>
-          <div class="bot"><b><span class="en">Done before:</span><span class="zh">我做过：</span></b> <span class="en">AI-sorted 1,300+ creators, outreach +75%</span><span class="zh">AI 筛选 1,300+ 达人，外联效率 +75%</span></div>
+          <div class="top"><a href="https://www.eternityx.com/case-study/mcdonalds-hong-kong-2026-shogun-campaign-case-study/" target="_blank" rel="noopener">eternityx.com · case study</a><h3>McDonald's HK · Shogun 2026</h3><p><span class="en">90 KOLs/KOCs for mainland visitors in a seven-day window; 989K+ impressions, 700+ UGC posts.</span><span class="zh">面向内地游客，7 天窗口内调动 90 位 KOL/KOC；曝光 989K+，UGC 700+。</span><span class="zht">面向內地遊客，7 天窗口內調動 90 位 KOL/KOC；曝光 989K+，UGC 700+。</span></p></div>
+          <div class="mid"><span class="k"><span class="en">Where AI ops plugs in</span><span class="zh">AI 运营能补的环节</span><span class="zht">AI 營運能補的環節</span></span><p><span class="en">An always-on creator pool scored by activity and fit, so the shortlist and briefs are ready on day one; UGC and mentions pulled into one daily report automatically.</span><span class="zh">一个常备的达人池，按活跃度和匹配度打分，第一天就能出名单和简报；UGC 和提及自动汇总成每日报表。</span><span class="zht">一個常備的達人池，按活躍度和匹配度打分，第一天就能出名單和簡報；UGC 和提及自動匯總成每日報表。</span></p></div>
+          <div class="bot"><b><span class="en">Done before:</span><span class="zh">我做过：</span><span class="zht">我做過：</span></b> <span class="en">AI-sorted 1,300+ creators, outreach +75%</span><span class="zh">AI 筛选 1,300+ 达人，外联效率 +75%</span><span class="zht">AI 篩選 1,300+ 達人，外聯效率 +75%</span></div>
         </article>
         <article class="yc">
-          <div class="top"><a href="https://www.eternityx.com/case-study/hyatt-hotel-case-study/" target="_blank" rel="noopener">eternityx.com · case study</a><h3>Hyatt · Dubai Tourism · Kmart</h3><p><span class="en">Programmatic campaigns across WeChat, Huawei, Xiaohongshu and Chinese video platforms, reported against plan (e.g. Hyatt CPE −57%).</span><span class="zh">在微信、华为、小红书和中文视频平台的程序化投放，按计划考核（如 Hyatt CPE −57%）。</span></p></div>
-          <div class="mid"><span class="k"><span class="en">Where AI ops plugs in</span><span class="zh">AI 运营能补的环节</span></span><p><span class="en">One pipeline that pulls every platform's numbers into a single dashboard and flags CTR or CPE drift each morning, so account teams stop rebuilding the same report per market.</span><span class="zh">一条管道把各平台数据拉进同一个看板，每天早上提示 CTR、CPE 的异常波动，各市场团队不用再各自重做同一份报表。</span></p></div>
-          <div class="bot"><b><span class="en">Done before:</span><span class="zh">我做过：</span></b> <span class="en">4 sales channels and 3 warehouses folded into one pipeline</span><span class="zh">四类销售渠道、三个仓库并成一条管道</span></div>
+          <div class="top"><a href="https://www.eternityx.com/case-study/hyatt-hotel-case-study/" target="_blank" rel="noopener">eternityx.com · case study</a><h3>Hyatt · Dubai Tourism · Kmart</h3><p><span class="en">Programmatic campaigns across WeChat, Huawei, Xiaohongshu and Chinese video platforms, reported against plan (e.g. Hyatt CPE −57%).</span><span class="zh">在微信、华为、小红书和中文视频平台的程序化投放，按计划考核（如 Hyatt CPE −57%）。</span><span class="zht">在微信、華為、小紅書和中文影片平台的程式化投放，按計劃考核（如 Hyatt CPE −57%）。</span></p></div>
+          <div class="mid"><span class="k"><span class="en">Where AI ops plugs in</span><span class="zh">AI 运营能补的环节</span><span class="zht">AI 營運能補的環節</span></span><p><span class="en">One pipeline that pulls every platform's numbers into a single dashboard and flags CTR or CPE drift each morning, so account teams stop rebuilding the same report per market.</span><span class="zh">一条管道把各平台数据拉进同一个看板，每天早上提示 CTR、CPE 的异常波动，各市场团队不用再各自重做同一份报表。</span><span class="zht">一條管道把各平台數據拉進同一個看板，每天早上提示 CTR、CPE 的異常波動，各市場團隊不用再各自重做同一份報表。</span></p></div>
+          <div class="bot"><b><span class="en">Done before:</span><span class="zh">我做过：</span><span class="zht">我做過：</span></b> <span class="en">4 sales channels and 3 warehouses folded into one pipeline</span><span class="zh">四类销售渠道、三个仓库并成一条管道</span><span class="zht">四類銷售渠道、三個倉庫併成一條管道</span></div>
         </article>
         <article class="yc">
-          <div class="top"><a href="https://www.eternityx.com/" target="_blank" rel="noopener">eternityx.com · research</a><h3><span class="en">Golden Week, Labour Day, Beyond Borders reports</span><span class="zh">黄金周、五一、Beyond Borders 等研究报告</span></h3><p><span class="en">Your research team already publishes travel and outbound-consumer insight.</span><span class="zh">你们的研究团队一直在发布出行和出海消费洞察。</span></p></div>
-          <div class="mid"><span class="k"><span class="en">Where AI ops plugs in</span><span class="zh">AI 运营能补的环节</span></span><p><span class="en">Turn each report into a BD alert: brands whose category is rising get a ready-made pitch brief. Add an "AI answer audit" to client proposals: how often ChatGPT or DeepSeek recommends the brand to Chinese travellers.</span><span class="zh">把每份报告变成 BD 预警：品类在升温的品牌，直接配好一份提案简报。再在客户方案里加一项“AI 答案体检”：ChatGPT、DeepSeek 向中国游客推荐这个品牌的频率。</span></p></div>
-          <div class="bot"><b><span class="en">Done before:</span><span class="zh">我做过：</span></b> <span class="en">GEO baseline and re-tests, AI citation 16.7% → 58.3%</span><span class="zh">GEO 基线与复测，AI 引用率 16.7% → 58.3%</span></div>
+          <div class="top"><a href="https://www.eternityx.com/" target="_blank" rel="noopener">eternityx.com · research</a><h3><span class="en">Golden Week, Labour Day, Beyond Borders reports</span><span class="zh">黄金周、五一、Beyond Borders 等研究报告</span><span class="zht">黃金週、五一、Beyond Borders 等研究報告</span></h3><p><span class="en">Your research team already publishes travel and outbound-consumer insight.</span><span class="zh">你们的研究团队一直在发布出行和出海消费洞察。</span><span class="zht">你們的研究團隊一直在發佈出行和出海消費洞察。</span></p></div>
+          <div class="mid"><span class="k"><span class="en">Where AI ops plugs in</span><span class="zh">AI 运营能补的环节</span><span class="zht">AI 營運能補的環節</span></span><p><span class="en">Turn each report into a BD alert: brands whose category is rising get a ready-made pitch brief. Add an "AI answer audit" to client proposals: how often ChatGPT or DeepSeek recommends the brand to Chinese travellers.</span><span class="zh">把每份报告变成 BD 预警：品类在升温的品牌，直接配好一份提案简报。再在客户方案里加一项“AI 答案体检”：ChatGPT、DeepSeek 向中国游客推荐这个品牌的频率。</span><span class="zht">把每份報告變成 BD 預警：品類在升溫的品牌，直接配好一份提案簡報。再在客戶方案裡加一項「AI 答案體檢」：ChatGPT、DeepSeek 向中國遊客推薦這個品牌的頻率。</span></p></div>
+          <div class="bot"><b><span class="en">Done before:</span><span class="zh">我做过：</span><span class="zht">我做過：</span></b> <span class="en">GEO baseline and re-tests, AI citation 16.7% → 58.3%</span><span class="zh">GEO 基线与复测，AI 引用率 16.7% → 58.3%</span><span class="zht">GEO 基線與重測，AI 引用率 16.7% → 58.3%</span></div>
         </article>
       </div>
     </div>
@@ -459,20 +463,20 @@ footer .c{font-family:var(--m);font-size:14px;color:var(--sun)}
 
   <section class="ch c-calc pad" id="s-calc" data-step>
     <div class="wrap">
-      <div class="head"><div><p class="k" style="color:var(--cobalt)"><span class="en">Your "operational hour reduction target"</span><span class="zh">对应 JD 的“运营工时削减目标”</span></p><h2 style="margin-top:12px"><span class="en">I size it before I build it.</span><span class="zh">动手之前，先算值不值。</span></h2></div></div>
+      <div class="head"><div><p class="k" style="color:var(--cobalt)"><span class="en">Your "operational hour reduction target"</span><span class="zh">对应 JD 的“运营工时削减目标”</span><span class="zht">對應 JD 的「營運工時削減目標」</span></p><h2 style="margin-top:12px"><span class="en">I size it before I build it.</span><span class="zh">动手之前，先算值不值。</span><span class="zht">動手之前，先算值不值。</span></h2></div></div>
       <div class="calc">
         <div style="display:grid;gap:18px">
-          <div class="field"><label for="c-n"><span><span class="en">Times a day</span><span class="zh">每天发生几次</span></span><output id="o-n"></output></label><input id="c-n" type="range" min="1" max="300" value="60"></div>
-          <div class="field"><label for="c-m"><span><span class="en">Minutes by hand</span><span class="zh">手工一次几分钟</span></span><output id="o-m"></output></label><input id="c-m" type="range" min="1" max="60" value="6"></div>
-          <div class="field"><label for="c-a"><span><span class="en">Share automation removes</span><span class="zh">自动化省掉的比例</span></span><output id="o-a"></output></label><input id="c-a" type="range" min="10" max="95" value="70"></div>
-          <div class="field"><label for="c-d"><span><span class="en">Working days a month</span><span class="zh">每月工作日</span></span><output id="o-d"></output></label><input id="c-d" type="range" min="15" max="26" value="22"></div>
-          <p class="illus"><span class="en">Defaults are an example, not results from my past work.</span><span class="zh">默认值只是示例，不是我过往项目的数据。</span></p>
+          <div class="field"><label for="c-n"><span><span class="en">Times a day</span><span class="zh">每天发生几次</span><span class="zht">每天發生幾次</span></span><output id="o-n"></output></label><input id="c-n" type="range" min="1" max="300" value="60"></div>
+          <div class="field"><label for="c-m"><span><span class="en">Minutes by hand</span><span class="zh">手工一次几分钟</span><span class="zht">手工一次幾分鐘</span></span><output id="o-m"></output></label><input id="c-m" type="range" min="1" max="60" value="6"></div>
+          <div class="field"><label for="c-a"><span><span class="en">Share automation removes</span><span class="zh">自动化省掉的比例</span><span class="zht">自動化省掉的比例</span></span><output id="o-a"></output></label><input id="c-a" type="range" min="10" max="95" value="70"></div>
+          <div class="field"><label for="c-d"><span><span class="en">Working days a month</span><span class="zh">每月工作日</span><span class="zht">每月工作日</span></span><output id="o-d"></output></label><input id="c-d" type="range" min="15" max="26" value="22"></div>
+          <p class="illus"><span class="en">Defaults are an example, not results from my past work.</span><span class="zh">默认值只是示例，不是我过往项目的数据。</span><span class="zht">預設值只是示例，不是我過往項目的數據。</span></p>
         </div>
         <div class="out">
-          <small><span class="en">Hours given back every month</span><span class="zh">每月省下的工时</span></small>
+          <small><span class="en">Hours given back every month</span><span class="zh">每月省下的工时</span><span class="zht">每月省下的工時</span></small>
           <div class="big" id="c-out">0</div>
           <small id="c-fte"></small>
-          <small><span class="en">Then three checks: who owns the result, where a human confirms, how we measure after launch.</span><span class="zh">再过三关：结果谁负责，哪一步要人确认，上线后怎么量化。</span></small>
+          <small><span class="en">Then three checks: who owns the result, where a human confirms, how we measure after launch.</span><span class="zh">再过三关：结果谁负责，哪一步要人确认，上线后怎么量化。</span><span class="zht">再過三關：結果誰負責，哪一步要人確認，上線後怎麼量化。</span></small>
         </div>
       </div>
     </div>
@@ -480,16 +484,16 @@ footer .c{font-family:var(--m);font-size:14px;color:var(--sun)}
 
   <section class="ch c-views pad" id="s-views" data-step>
     <div class="wrap">
-      <div class="head"><div><p class="k" style="color:var(--cobalt)"><span class="en">How I see AI products</span><span class="zh">我怎么看 AI 产品</span></p><h2 style="margin-top:12px"><span class="en">Three beliefs. Ninety days.</span><span class="zh">三个判断，九十天。</span></h2></div></div>
+      <div class="head"><div><p class="k" style="color:var(--cobalt)"><span class="en">How I see AI products</span><span class="zh">我怎么看 AI 产品</span><span class="zht">我怎麼看 AI 產品</span></p><h2 style="margin-top:12px"><span class="en">Three beliefs. Ninety days.</span><span class="zh">三个判断，九十天。</span><span class="zht">三個判斷，九十天。</span></h2></div></div>
       <div class="views">
-        <div class="vw"><span class="big">↻</span><h3><span class="en">Value lives in the workflow</span><span class="zh">价值在工作流里</span></h3><p><span class="en">Models get better and cheaper. What lasts is a company's own data, rules and process around them.</span><span class="zh">模型会越来越强、越来越便宜，真正留得住的是企业自己的数据、规则和流程。</span></p></div>
-        <div class="vw"><span class="big">◐</span><h3><span class="en">Humans stay where risk is</span><span class="zh">风险高处留给人</span></h3><p><span class="en">Launch with a human gate and an audit log. Widen automation as it earns trust.</span><span class="zh">先带着人工确认和审计记录上线，跑稳了再一步步放开。</span></p></div>
-        <div class="vw"><span class="big">◎</span><h3><span class="en">AI answers are a media channel</span><span class="zh">AI 答案是新媒体渠道</span></h3><p><span class="en">Buyers ask ChatGPT before they search. Being cited in AI answers will sit next to paid media in a plan.</span><span class="zh">消费者先问 ChatGPT 再搜索。被 AI 答案引用，会和付费媒体一起出现在投放计划里。</span></p></div>
+        <div class="vw"><span class="big">↻</span><h3><span class="en">Value lives in the workflow</span><span class="zh">价值在工作流里</span><span class="zht">價值在工作流裡</span></h3><p><span class="en">Models get better and cheaper. What lasts is a company's own data, rules and process around them.</span><span class="zh">模型会越来越强、越来越便宜，真正留得住的是企业自己的数据、规则和流程。</span><span class="zht">模型會越來越強、越來越便宜，真正留得住的是企業自己的數據、規則和流程。</span></p></div>
+        <div class="vw"><span class="big">◐</span><h3><span class="en">Humans stay where risk is</span><span class="zh">风险高处留给人</span><span class="zht">風險高處留給人</span></h3><p><span class="en">Launch with a human gate and an audit log. Widen automation as it earns trust.</span><span class="zh">先带着人工确认和审计记录上线，跑稳了再一步步放开。</span><span class="zht">先帶著人工確認和審計記錄上線，跑穩了再一步步放開。</span></p></div>
+        <div class="vw"><span class="big">◎</span><h3><span class="en">AI answers are a media channel</span><span class="zh">AI 答案是新媒体渠道</span><span class="zht">AI 答案是新媒體渠道</span></h3><p><span class="en">Buyers ask ChatGPT before they search. Being cited in AI answers will sit next to paid media in a plan.</span><span class="zh">消费者先问 ChatGPT 再搜索。被 AI 答案引用，会和付费媒体一起出现在投放计划里。</span><span class="zht">消費者先問 ChatGPT 再搜尋。被 AI 答案引用，會和付費媒體一起出現在投放計劃裡。</span></p></div>
       </div>
       <div class="plan">
-        <div class="ph"><span class="k"><span class="en">Days 1–30 · Listen</span><span class="zh">第 1–30 天 · 摸清</span></span><h3><span class="en">Map the manual work</span><span class="zh">摸清手工活</span></h3><p><span class="en">Sit with BD, Marketing, Finance and Ops. List repeated tasks, size each in hours, agree two quick wins.</span><span class="zh">和 BD、市场、财务、运营坐下来，列出重复工作，逐项估工时，定两个速赢项目。</span></p></div>
-        <div class="ph"><span class="k"><span class="en">Days 31–60 · Ship</span><span class="zh">第 31–60 天 · 上线</span></span><h3><span class="en">Two quick wins live</span><span class="zh">两个速赢上线</span></h3><p><span class="en">Ship them on the low-code stack with a human gate, train users, start a weekly hours-saved report.</span><span class="zh">用低代码平台上线，保留人工确认，培训同事，开始每周汇报省下的工时。</span></p></div>
-        <div class="ph"><span class="k"><span class="en">Days 61–90 · Scale</span><span class="zh">第 61–90 天 · 放大</span></span><h3><span class="en">BD alerts, one pipeline</span><span class="zh">BD 预警，统一管道</span></h3><p><span class="en">A weekly BD intelligence brief from market and ad-industry signals; fold duplicated regional workflows into one.</span><span class="zh">用市场和广告行业信号做每周 BD 情报简报；把各区域重复流程合并成一条。</span></p></div>
+        <div class="ph"><span class="k"><span class="en">Days 1–30 · Listen</span><span class="zh">第 1–30 天 · 摸清</span><span class="zht">第 1–30 天 · 摸清</span></span><h3><span class="en">Map the manual work</span><span class="zh">摸清手工活</span><span class="zht">摸清手工活</span></h3><p><span class="en">Sit with BD, Marketing, Finance and Ops. List repeated tasks, size each in hours, agree two quick wins.</span><span class="zh">和 BD、市场、财务、运营坐下来，列出重复工作，逐项估工时，定两个速赢项目。</span><span class="zht">和 BD、市場、財務、營運坐下來，列出重複工作，逐項估工時，定兩個速贏項目。</span></p></div>
+        <div class="ph"><span class="k"><span class="en">Days 31–60 · Ship</span><span class="zh">第 31–60 天 · 上线</span><span class="zht">第 31–60 天 · 上線</span></span><h3><span class="en">Two quick wins live</span><span class="zh">两个速赢上线</span><span class="zht">兩個速贏上線</span></h3><p><span class="en">Ship them on the low-code stack with a human gate, train users, start a weekly hours-saved report.</span><span class="zh">用低代码平台上线，保留人工确认，培训同事，开始每周汇报省下的工时。</span><span class="zht">用低代碼平台上線，保留人工確認，培訓同事，開始每週匯報省下的工時。</span></p></div>
+        <div class="ph"><span class="k"><span class="en">Days 61–90 · Scale</span><span class="zh">第 61–90 天 · 放大</span><span class="zht">第 61–90 天 · 放大</span></span><h3><span class="en">BD alerts, one pipeline</span><span class="zh">BD 预警，统一管道</span><span class="zht">BD 預警，統一管道</span></h3><p><span class="en">A weekly BD intelligence brief from market and ad-industry signals; fold duplicated regional workflows into one.</span><span class="zh">用市场和广告行业信号做每周 BD 情报简报；把各区域重复流程合并成一条。</span><span class="zht">用市場和廣告行業訊號做每週 BD 情報簡報；把各區域重複流程合併成一條。</span></p></div>
       </div>
     </div>
   </section>
@@ -497,9 +501,9 @@ footer .c{font-family:var(--m);font-size:14px;color:var(--sun)}
 
 <footer class="pad">
   <div class="wrap">
-    <h2><span class="en">Let's build it.</span><span class="zh">一起把它做出来。</span></h2>
-    <span class="c">Hong TANG · 唐鸿 · tanghocoal@outlook.com · linkedin.com/in/hom-tang-coal</span>
-    <span style="font-size:13px"><span class="en">Figures come from my own work records; company-internal details are left out.</span><span class="zh">数字来自我的工作记录；公司内部细节已略去。</span></span>
+    <h2><span class="en">Let's build it.</span><span class="zh">一起把它做出来。</span><span class="zht">一起把它做出來。</span></h2>
+    <span class="c">Hong TANG · <span class="en">唐鸿</span><span class="zh">唐鸿</span><span class="zht">唐鴻</span> · tanghocoal@outlook.com · linkedin.com/in/hom-tang-coal</span>
+    <span style="font-size:13px"><span class="en">Figures come from my own work records; company-internal details are left out.</span><span class="zh">数字来自我的工作记录；公司内部细节已略去。</span><span class="zht">數字來自我的工作記錄；公司內部細節已略去。</span></span>
   </div>
 </footer>
 
@@ -509,11 +513,12 @@ footer .c{font-family:var(--m);font-size:14px;color:var(--sun)}
 (()=>{
 const R=document.documentElement, $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const L=()=>R.dataset.lang; const t=(e,z)=>L()==='zh'?z:e;
+const HKP=[["复核", "覆核"], ["复购", "回購"], ["复现", "重現"], ["修复", "修復"], ["重复", "重複"], ["复制粘贴", "複製貼上"], ["复制", "複製"], ["复测", "重測"], ["回复", "回覆"], ["复盘", "覆盤"], ["合并", "合併"], ["并成", "併成"], ["联系", "聯繫"], ["游客", "遊客"], ["准确", "準確"], ["日志", "日誌"], ["视频", "影片"], ["程序化", "程式化"], ["程序", "程式"], ["默认", "預設"], ["搜索", "搜尋"], ["运营", "營運"], ["信号", "訊號"], ["台账", "台賬"], ["信息", "資訊"], ["登录", "登入"], ["接口", "API "], ["插件", "擴充功能"], ["每周", "每週"], ["黄金周", "黃金週"], ["发布", "發佈"], ["质量", "質素"], ["软件", "軟件"]],HKC={"与": "與", "专": "專", "业": "業", "两": "兩", "个": "個", "为": "為", "么": "麼", "书": "書", "买": "買", "于": "於", "产": "產", "从": "從", "仓": "倉", "们": "們", "价": "價", "优": "優", "会": "會", "体": "體", "关": "關", "内": "內", "写": "寫", "决": "決", "准": "準", "减": "減", "几": "幾", "击": "擊", "划": "劃", "则": "則", "办": "辦", "务": "務", "动": "動", "区": "區", "华": "華", "协": "協", "单": "單", "发": "發", "变": "變", "号": "號", "后": "後", "吗": "嗎", "员": "員", "团": "團", "国": "國", "场": "場", "块": "塊", "处": "處", "备": "備", "复": "複", "实": "實", "审": "審", "对": "對", "层": "層", "属": "屬", "带": "帶", "帮": "幫", "并": "並", "广": "廣", "库": "庫", "应": "應", "开": "開", "异": "異", "张": "張", "弹": "彈", "强": "強", "录": "錄", "径": "徑", "忆": "憶", "态": "態", "总": "總", "户": "戶", "扩": "擴", "报": "報", "拟": "擬", "换": "換", "据": "據", "数": "數", "断": "斷", "无": "無", "时": "時", "机": "機", "条": "條", "来": "來", "构": "構", "标": "標", "样": "樣", "检": "檢", "汇": "匯", "没": "沒", "测": "測", "温": "溫", "游": "遊", "点": "點", "状": "狀", "独": "獨", "猫": "貓", "环": "環", "现": "現", "电": "電", "画": "畫", "着": "著", "码": "碼", "确": "確", "离": "離", "种": "種", "积": "積", "稳": "穩", "筛": "篩", "签": "簽", "简": "簡", "类": "類", "红": "紅", "约": "約", "级": "級", "线": "線", "细": "細", "经": "經", "结": "結", "给": "給", "统": "統", "继": "繼", "绩": "績", "续": "續", "编": "編", "网": "網", "职": "職", "联": "聯", "脚": "腳", "节": "節", "荐": "薦", "营": "營", "补": "補", "装": "裝", "规": "規", "视": "視", "计": "計", "订": "訂", "认": "認", "让": "讓", "训": "訓", "议": "議", "记": "記", "论": "論", "设": "設", "访": "訪", "证": "證", "识": "識", "诉": "訴", "试": "試", "话": "話", "语": "語", "说": "說", "请": "請", "读": "讀", "谁": "誰", "调": "調", "谈": "談", "负": "負", "财": "財", "责": "責", "败": "敗", "账": "賬", "货": "貨", "购": "購", "贴": "貼", "费": "費", "赢": "贏", "跃": "躍", "转": "轉", "载": "載", "边": "邊", "达": "達", "迁": "遷", "过": "過", "运": "運", "还": "還", "这": "這", "进": "進", "选": "選", "里": "裡", "针": "針", "钟": "鐘", "销": "銷", "错": "錯", "长": "長", "门": "門", "问": "問", "间": "間", "队": "隊", "险": "險", "随": "隨", "隐": "隱", "项": "項", "预": "預", "频": "頻", "题": "題", "风": "風", "飞": "飛", "驻": "駐", "验": "驗", "鸿": "鴻", "黄": "黃", "“": "「", "”": "」"};function HK(x){let o='',i=0;x=String(x);while(i<x.length){let hit=0;for(const [a,b] of HKP){if(x.startsWith(a,i)){o+=b;i+=a.length;hit=1;break}}if(!hit){o+=HKC[x[i]]||x[i];i++}}return o}
+const L=()=>R.dataset.lang; const t=(e,z)=>L()==='zh'?z:L()==='zht'?HK(z):e;
 let lang='en'; try{lang=localStorage.getItem('ht-lang')||'en'}catch(e){} R.dataset.lang=lang;
 const langHooks=[];
-function setLang(l){R.dataset.lang=l;R.lang=l==='zh'?'zh-Hans':'en';$('#lang-en').setAttribute('aria-pressed',l==='en');$('#lang-zh').setAttribute('aria-pressed',l==='zh');try{localStorage.setItem('ht-lang',l)}catch(e){};langHooks.forEach(f=>f());}
-$('#lang-en').onclick=()=>setLang('en'); $('#lang-zh').onclick=()=>setLang('zh');
+function setLang(l){if(!['en','zh','zht'].includes(l))l='en';R.dataset.lang=l;R.lang=l==='zh'?'zh-Hans':l==='zht'?'zh-Hant-HK':'en';$('#lang-en').setAttribute('aria-pressed',l==='en');$('#lang-zh').setAttribute('aria-pressed',l==='zh');$('#lang-zht').setAttribute('aria-pressed',l==='zht');try{localStorage.setItem('ht-lang',l)}catch(e){};langHooks.forEach(f=>f());}
+$('#lang-en').onclick=()=>setLang('en'); $('#lang-zh').onclick=()=>setLang('zh'); $('#lang-zht').onclick=()=>setLang('zht');
 
 /* ticker */
 const tk=[['All staff','rolled out my AI assistant','自研 AI 助手全员上线'],['10→2–3 min','daily order handling','每日发货处理'],['16.7→58.3%','AI search citation','AI 搜索引用率'],['+75%','outreach efficiency','外联效率'],['1,300+','creators sourced by AI','AI 筛选达人'],['20→29%','repeat purchase','复购率'],['4,011','offline AI test cases','AI 离线测试样本'],['390','installs, 5★ extension','插件安装 · 5 星']];
@@ -552,7 +557,7 @@ function Flow(cv,{dark=true}={}){
     P=P.filter(p=>!p.dead);
     // nodes
     ctx.textAlign='center';ctx.textBaseline='middle';
-    G.nodes.forEach(n=>{const {x,y}=pos(n);const lab=t(n.en,n.zh);ctx.font=`${n.core?'700 13px':'500 11.5px'} Onest, "Noto Sans SC", sans-serif`;
+    G.nodes.forEach(n=>{const {x,y}=pos(n);const lab=t(n.en,n.zh);ctx.font=`${n.core?'700 13px':'500 11.5px'} Onest, ${L()==='zht'?'"Noto Sans TC", ':''}"Noto Sans SC", sans-serif`;
       const w=Math.max(ctx.measureText(lab).width+22,n.core?96:60), h=n.core?40:28;
       rr(x-w/2,y-h/2,w,h,n.core?12:8); ctx.fillStyle=n.core?'#FFC83D':(n.human?'rgba(255,255,255,.04)':'rgba(255,255,255,.08)'); ctx.fill();
       ctx.lineWidth=1.2; ctx.setLineDash(n.human?[4,3]:[]); ctx.strokeStyle=n.core?'#FFC83D':'rgba(200,215,255,.45)'; ctx.stroke(); ctx.setLineDash([]);
